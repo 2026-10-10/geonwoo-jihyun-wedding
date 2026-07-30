@@ -8,12 +8,13 @@
     <meta property="og:description" content="소중한 분들을 저희의 시작에 초대합니다.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://2026-10-10.github.io/geonwoo-jihyun-wedding/">
-    <meta property="og:image" content="https://2026-10-10.github.io/geonwoo-jihyun-wedding/assets/wedding-rings-512.png">
-    <meta property="og:image:width" content="512">
-    <meta property="og:image:height" content="512">
-    <meta name="twitter:card" content="summary">
+    <meta property="og:image" content="https://2026-10-10.github.io/geonwoo-jihyun-wedding/assets/hero-1.jpg">
+    <meta property="og:image:width" content="1600">
+    <meta property="og:image:height" content="2399">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="박건우・김지현 우리 결혼합니다 ♡">
     <meta name="twitter:description" content="소중한 분들을 저희의 시작에 초대합니다.">
+    <meta name="twitter:image" content="https://2026-10-10.github.io/geonwoo-jihyun-wedding/assets/hero-1.jpg">
     <title>박건우・김지현 우리 결혼합니다 ♡</title>
     <link rel="icon" href="assets/wedding-rings-32.png" type="image/png" sizes="32x32">
     <link rel="icon" href="assets/wedding-rings-512.png" type="image/png" sizes="512x512">
@@ -157,7 +158,7 @@
       .opening-message p + p { margin-top: 28px; }
       .family-info {
         padding: 24px 30px 72px;
-        font-size: clamp(15px, 4.2vw, 18px);
+        font-size: clamp(17px, 4.6vw, 21px);
         line-height: 2.1;
         text-align: center;
         word-break: keep-all;
@@ -268,8 +269,9 @@
       .map-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
       .map-links a { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; border: 1px solid var(--line); color: var(--ink); font-size: 13px; text-decoration: none; }
       .map-links a:hover, .map-links a:focus-visible { border-color: var(--ink); }
-      .transport-guide { margin-top: 36px; border-top: 1px solid var(--line); text-align: center; }
+      .transport-guide { margin-top: 36px; text-align: center; }
       .transport-guide > div { padding: 20px 0; border-bottom: 1px solid var(--line); }
+      .transport-guide > div:last-child { padding-bottom: 0; border-bottom: 0; }
       .transport-guide h3 { margin: 0 0 10px; font-size: 17px; font-weight: 700; }
       .transport-guide p { margin: 0; color: #766d68; font-size: 14px; line-height: 1.8; }
       #countdown { min-height: auto; padding: 64px 28px; }
@@ -305,7 +307,10 @@
       .gallery-thumbnails.is-dragging { cursor: grabbing; user-select: none; }
       .gallery-thumbnails::-webkit-scrollbar { display: none; }
       .gallery-thumbnails-wrap { position: relative; }
-      .gallery-thumbnail-next { position: absolute; top: 50%; right: -4px; z-index: 2; width: 32px; height: 44px; border: 0; color: var(--ink); background: linear-gradient(90deg, transparent, rgb(252 252 252 / 92%) 38%); font: 28px/1 sans-serif; cursor: pointer; transform: translateY(-58%); }
+      .gallery-thumbnail-arrow { position: absolute; top: 50%; z-index: 2; width: 32px; height: 44px; border: 0; color: var(--ink); font: 28px/1 sans-serif; cursor: pointer; transform: translateY(-58%); }
+      .gallery-thumbnail-arrow[hidden] { display: none; }
+      .gallery-thumbnail-prev { left: -4px; background: linear-gradient(270deg, transparent, rgb(252 252 252 / 92%) 38%); }
+      .gallery-thumbnail-next { right: -4px; background: linear-gradient(90deg, transparent, rgb(252 252 252 / 92%) 38%); }
       .gallery-pair { flex: 0 0 23%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; scroll-snap-align: start; }
       .gallery-thumbnail { aspect-ratio: 2 / 3; padding: 0; overflow: hidden; border: 1px solid transparent; background: #e7dfd8; cursor: pointer; }
       .gallery-thumbnail.is-active { border-color: var(--ink); }
@@ -486,8 +491,9 @@
         </div>
         <p class="gallery-counter"><span id="gallery-current">1</span>/<span id="gallery-total">16</span></p>
         <div class="gallery-thumbnails-wrap">
+          <button class="gallery-thumbnail-arrow gallery-thumbnail-prev" id="gallery-thumbnail-prev" type="button" aria-label="이전 사진 목록 보기" hidden>‹</button>
           <div class="gallery-thumbnails" id="gallery-thumbnails" aria-label="사진 선택"></div>
-          <button class="gallery-thumbnail-next" id="gallery-thumbnail-next" type="button" aria-label="다음 사진 보기">›</button>
+          <button class="gallery-thumbnail-arrow gallery-thumbnail-next" id="gallery-thumbnail-next" type="button" aria-label="다음 사진 목록 보기">›</button>
         </div>
       </section>
       <section id="location">
@@ -580,6 +586,7 @@
       const galleryCurrent = document.querySelector('#gallery-current');
       const galleryTotal = document.querySelector('#gallery-total');
       const galleryThumbnails = document.querySelector('#gallery-thumbnails');
+      const galleryThumbnailPrev = document.querySelector('#gallery-thumbnail-prev');
       const galleryThumbnailNext = document.querySelector('#gallery-thumbnail-next');
       const gallerySection = document.querySelector('.gallery-section');
       const locationSection = document.querySelector('#location');
@@ -1201,7 +1208,16 @@
         event.stopPropagation();
         suppressThumbnailClick = false;
       }, true);
+      function updateGalleryThumbnailArrows() {
+        const maximumScroll = Math.max(0, galleryThumbnails.scrollWidth - galleryThumbnails.clientWidth);
+        galleryThumbnailPrev.hidden = galleryThumbnails.scrollLeft <= 2;
+        galleryThumbnailNext.hidden = galleryThumbnails.scrollLeft >= maximumScroll - 2;
+      }
+      galleryThumbnails.addEventListener('scroll', updateGalleryThumbnailArrows, { passive: true });
+      window.addEventListener('resize', updateGalleryThumbnailArrows, { passive: true });
+      galleryThumbnailPrev.addEventListener('click', () => galleryThumbnails.scrollBy({ left: galleryThumbnails.clientWidth * -.78, behavior: 'smooth' }));
       galleryThumbnailNext.addEventListener('click', () => galleryThumbnails.scrollBy({ left: galleryThumbnails.clientWidth * .78, behavior: 'smooth' }));
+      window.requestAnimationFrame(updateGalleryThumbnailArrows);
 
       async function playMusic() {
         try {
