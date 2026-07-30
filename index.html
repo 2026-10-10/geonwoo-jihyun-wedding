@@ -37,12 +37,13 @@
       }
 
       * { box-sizing: border-box; }
-      html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+      html { scroll-behavior: smooth; scroll-snap-type: y proximity; overscroll-behavior-x: none; }
       body {
         margin: 0;
         color: var(--ink);
         background: var(--paper);
         font-family: "Jeju Myeongjo", "Apple Myungjo", serif;
+        overscroll-behavior-x: none;
       }
 
       .site-header {
@@ -446,7 +447,7 @@
         <div class="third-photo-row">
           <div class="third-message">
             <p>신랑은<br>곁에 있으면 가장 나답고<br>편안해지는 사람입니다.</p>
-            <p>사소한 순간에도<br>늘 저의 마음을 먼저<br>헤아려주고,<br>필요한 순간에는 망설임 없이<br>손을 내밀어주는<br>따뜻한 마음을 지녔습니다.</p>
+            <p>사소한 순간에도<br>늘 저의 마음을 먼저 헤아려주고,<br>필요한 순간에는 망설임 없이<br>손을 내밀어주는<br>따뜻한 마음을 지녔습니다.</p>
             <p>한결같이 곁을 지켜주는<br>든든하고 믿음직한 사람입니다.</p>
             <p>-지현</p>
           </div>
@@ -619,7 +620,7 @@
         if (isMovingToSnapTarget) return false;
         const target = scrollSnapTargets.find((element) => {
           const top = element.getBoundingClientRect().top;
-          return top > 8 && top < window.innerHeight * .82;
+          return top > 4 && top < window.innerHeight * .98;
         });
         if (!target) return false;
         isMovingToSnapTarget = true;
@@ -641,7 +642,7 @@
       document.addEventListener('touchend', (event) => {
         const distanceX = event.changedTouches[0].clientX - heroTouchStartX;
         const distanceY = heroTouchStartY - event.changedTouches[0].clientY;
-        if (distanceY > 35 && distanceY > Math.abs(distanceX) * 1.2) moveToNearbySnapTarget();
+        if (distanceY > 12 && distanceY > Math.abs(distanceX) * 1.05) moveToNearbySnapTarget();
       }, { passive: true });
 
       function updateCountdown() {
@@ -1051,19 +1052,43 @@
         selectGalleryImage(availableGalleryIndexes[nextPosition], direction);
       }
       let gallerySwipeStartX = 0;
+      let gallerySwipeStartY = 0;
       let gallerySwipeStartedAt = 0;
       let gallerySwipePointerId = null;
+      let gallerySwipeAxis = '';
+
+      function snapGallerySectionIntoPlace() {
+        const galleryTop = gallerySection.getBoundingClientRect().top;
+        if (Math.abs(galleryTop) <= 2 || Math.abs(galleryTop) >= window.innerHeight) return;
+        const root = document.documentElement;
+        const previousScrollBehavior = root.style.scrollBehavior;
+        root.style.scrollBehavior = 'auto';
+        window.scrollTo({ top: window.scrollY + galleryTop, left: 0, behavior: 'auto' });
+        window.requestAnimationFrame(() => { root.style.scrollBehavior = previousScrollBehavior; });
+        isMovingToSnapTarget = false;
+      }
+
       galleryMain.addEventListener('pointerdown', (event) => {
         if (galleryTurnState !== 'idle' || (event.pointerType === 'mouse' && event.button !== 0)) return;
+        snapGallerySectionIntoPlace();
         gallerySwipeStartX = event.clientX;
+        gallerySwipeStartY = event.clientY;
         gallerySwipeStartedAt = performance.now();
         gallerySwipePointerId = event.pointerId;
+        gallerySwipeAxis = '';
         galleryMain.classList.add('is-dragging');
         galleryMain.setPointerCapture(event.pointerId);
       });
       galleryMain.addEventListener('pointermove', (event) => {
         if (event.pointerId !== gallerySwipePointerId) return;
         const swipeDistance = event.clientX - gallerySwipeStartX;
+        const verticalDistance = event.clientY - gallerySwipeStartY;
+        if (!gallerySwipeAxis) {
+          if (Math.max(Math.abs(swipeDistance), Math.abs(verticalDistance)) < 6) return;
+          gallerySwipeAxis = Math.abs(swipeDistance) > Math.abs(verticalDistance) * 1.05 ? 'horizontal' : 'vertical';
+        }
+        if (gallerySwipeAxis !== 'horizontal') return;
+        if (event.cancelable) event.preventDefault();
         if (galleryTurnState === 'idle') {
           if (Math.abs(swipeDistance) < 8) return;
           const direction = swipeDistance < 0 ? 1 : -1;
@@ -1073,17 +1098,18 @@
         if (galleryTurnState !== 'dragging') return;
         const directionalDistance = galleryTurnDirection > 0 ? -swipeDistance : swipeDistance;
         const progress = directionalDistance / galleryMain.clientWidth;
-        if (event.cancelable && progress > 0) event.preventDefault();
         setGalleryTurnVisual(progress);
       }, { passive: false });
       galleryMain.addEventListener('pointerup', (event) => {
         if (event.pointerId !== gallerySwipePointerId) return;
         const swipeDistance = event.clientX - gallerySwipeStartX;
         const swipeDuration = performance.now() - gallerySwipeStartedAt;
+        const completedAxis = gallerySwipeAxis;
         if (galleryMain.hasPointerCapture(event.pointerId)) galleryMain.releasePointerCapture(event.pointerId);
         galleryMain.classList.remove('is-dragging');
         gallerySwipePointerId = null;
-        if (galleryTurnState !== 'dragging') return;
+        gallerySwipeAxis = '';
+        if (completedAxis !== 'horizontal' || galleryTurnState !== 'dragging') return;
         const isQuickFlick = Math.abs(swipeDistance) > 32 && swipeDuration < 350;
         if (galleryTurnProgress >= .16 || isQuickFlick) completeGalleryTurn();
         else cancelGalleryTurn();
@@ -1092,8 +1118,23 @@
         if (event.pointerId !== gallerySwipePointerId) return;
         galleryMain.classList.remove('is-dragging');
         gallerySwipePointerId = null;
+        gallerySwipeAxis = '';
         if (galleryTurnState === 'dragging') cancelGalleryTurn();
       });
+
+      let galleryTouchStartX = 0;
+      let galleryTouchStartY = 0;
+      galleryMain.addEventListener('touchstart', (event) => {
+        galleryTouchStartX = event.touches[0].clientX;
+        galleryTouchStartY = event.touches[0].clientY;
+      }, { passive: true });
+      galleryMain.addEventListener('touchmove', (event) => {
+        const horizontalDistance = event.touches[0].clientX - galleryTouchStartX;
+        const verticalDistance = event.touches[0].clientY - galleryTouchStartY;
+        if (Math.abs(horizontalDistance) > 4 && Math.abs(horizontalDistance) > Math.abs(verticalDistance) * 1.05 && event.cancelable) {
+          event.preventDefault();
+        }
+      }, { passive: false });
       galleryThumbnails.addEventListener('wheel', (event) => {
         const scrollDistance = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
         if (!scrollDistance) return;
