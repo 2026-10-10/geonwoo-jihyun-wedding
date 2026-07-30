@@ -3,8 +3,22 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="건우와 지현의 결혼식에 초대합니다.">
-    <title>Geonwoo &amp; Jihyun Wedding</title>
+    <meta name="description" content="소중한 분들을 저희의 시작에 초대합니다.">
+    <meta property="og:title" content="박건우・김지현 우리 결혼합니다 ♡">
+    <meta property="og:description" content="소중한 분들을 저희의 시작에 초대합니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://2026-10-10.github.io/geonwoo-jihyun-wedding/">
+    <meta property="og:image" content="https://2026-10-10.github.io/geonwoo-jihyun-wedding/assets/wedding-rings-512.png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="박건우・김지현 우리 결혼합니다 ♡">
+    <meta name="twitter:description" content="소중한 분들을 저희의 시작에 초대합니다.">
+    <title>박건우・김지현 우리 결혼합니다 ♡</title>
+    <link rel="icon" href="assets/wedding-rings-32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="assets/wedding-rings-512.png" type="image/png" sizes="512x512">
+    <link rel="icon" href="assets/wedding-rings.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/wedding-rings-180.png" sizes="180x180">
     <link rel="preload" href="assets/fonts/JejuMyeongjo-subset.woff2" as="font" type="font/woff2" crossorigin>
     <style>
       @font-face {
@@ -23,7 +37,7 @@
       }
 
       * { box-sizing: border-box; }
-      html { scroll-behavior: smooth; }
+      html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
       body {
         margin: 0;
         color: var(--ink);
@@ -277,7 +291,7 @@
       #hero-second-photo,
       .gallery-section,
       #location,
-      #countdown { scroll-margin-top: 0; }
+      #countdown { scroll-margin-top: 0; scroll-snap-align: start; scroll-snap-stop: always; }
       .gallery-main { position: relative; width: 100%; aspect-ratio: 2 / 3; overflow: hidden; isolation: isolate; background: #e7dfd8; touch-action: pan-y; overscroll-behavior: contain; cursor: grab; user-select: none; -webkit-user-select: none; }
       .gallery-main.is-dragging { cursor: grabbing; }
       .gallery-main img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; user-select: none; -webkit-user-drag: none; }
@@ -390,18 +404,12 @@
         font-weight: 400;
         line-height: 1.55;
       }
-      .loading-guide {
-        color: rgb(255 255 255 / 76%);
-        font-size: 12px;
-        letter-spacing: .12em;
-      }
     </style>
   </head>
   <body>
     <div class="loading-screen">
       <button class="loading-start" type="button" aria-label="청첩장 시작 및 배경 음악 재생">
         <span class="loading-message">소중한 분들을<br>저희의 시작에 초대합니다.</span>
-        <span class="loading-guide">화면을 터치해 주세요</span>
       </button>
     </div>
     <audio id="background-music" src="assets/music.m4a" loop preload="none" playsinline></audio>
@@ -557,7 +565,6 @@
       const musicControl = document.querySelector('.music-control');
       const loadingScreen = document.querySelector('.loading-screen');
       const loadingStart = document.querySelector('.loading-start');
-      const loadingGuide = document.querySelector('.loading-guide');
       const menuControl = document.querySelector('.menu-control');
       const categoryNav = document.querySelector('.category-nav');
       const contactModal = document.querySelector('.contact-modal');
@@ -623,8 +630,8 @@
       document.addEventListener('wheel', (event) => {
         openInvitation(false);
         void startMusicFromGesture();
-        if (event.deltaY > 0) moveToNearbySnapTarget();
-      }, { passive: true });
+        if (event.deltaY > 0 && moveToNearbySnapTarget() && event.cancelable) event.preventDefault();
+      }, { passive: false });
       document.addEventListener('touchstart', (event) => {
         openInvitation(false);
         void startMusicFromGesture();
