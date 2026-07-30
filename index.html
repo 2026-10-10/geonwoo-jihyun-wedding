@@ -117,9 +117,9 @@
       .hero-sequence img { position: absolute; inset: 0; opacity: 0; transition: opacity .4s ease-in-out; }
       .second-sequence img { transition-duration: .5s; }
       .hero-sequence img.is-visible { opacity: 1; }
-      .third-photo-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; margin-top: 104px; }
+      .third-photo-row { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: center; margin-top: 104px; }
       .half-photo { width: 100%; aspect-ratio: 1171 / 2400; margin: 0; }
-      .third-message { padding: 0 22px 0 14px; color: #625b57; font-size: 13px; line-height: 1.8; text-align: left; }
+      .third-message { padding: 0 16px 0 14px; color: #625b57; font-size: 13px; line-height: 1.8; text-align: left; }
       .third-message p { margin: 0 0 18px; }
       .third-message p:last-child { margin-bottom: 0; }
       .wide-photo { width: 100%; aspect-ratio: 3 / 2; margin: 52px 0 0; }
@@ -132,16 +132,16 @@
         padding: 0;
       }
       .opening-message {
-        padding: 72px 30px 32px;
+        padding: 72px 30px 24px;
         font-size: 16px;
         line-height: 2;
         text-align: center;
         word-break: keep-all;
       }
       .opening-message p { margin: 0; }
-      .opening-message p + p { margin-top: 32px; }
+      .opening-message p + p { margin-top: 28px; }
       .family-info {
-        padding: 28px 30px 72px;
+        padding: 24px 30px 72px;
         font-size: clamp(15px, 4.2vw, 18px);
         line-height: 2.1;
         text-align: center;
@@ -152,7 +152,7 @@
       .family-info strong { font-weight: 700; }
       .relationship { font-size: .78em; }
       .family-info .ceremony-summary {
-        margin: 56px 0 0;
+        margin: 44px 0 0;
         font-size: clamp(17px, 4.6vw, 21px);
         line-height: 1.9;
       }
@@ -274,7 +274,11 @@
       .countdown-days { margin: 0; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 34px; }
       .countdown-time { margin: 12px 0 0; color: #766d68; font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 13px; letter-spacing: .08em; }
       .gallery-section { display: block; min-height: auto; padding: 64px 28px 54px; }
-      .gallery-main { position: relative; width: 100%; aspect-ratio: 2 / 3; overflow: hidden; isolation: isolate; background: #e7dfd8; touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+      #hero-second-photo,
+      .gallery-section,
+      #location,
+      #countdown { scroll-margin-top: 0; }
+      .gallery-main { position: relative; width: 100%; aspect-ratio: 2 / 3; overflow: hidden; isolation: isolate; background: #e7dfd8; touch-action: pan-y; overscroll-behavior: contain; cursor: grab; user-select: none; -webkit-user-select: none; }
       .gallery-main.is-dragging { cursor: grabbing; }
       .gallery-main img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; user-select: none; -webkit-user-drag: none; }
       #gallery-main-image { z-index: 1; }
@@ -569,12 +573,18 @@
       const galleryTotal = document.querySelector('#gallery-total');
       const galleryThumbnails = document.querySelector('#gallery-thumbnails');
       const galleryThumbnailNext = document.querySelector('#gallery-thumbnail-next');
+      const gallerySection = document.querySelector('.gallery-section');
+      const locationSection = document.querySelector('#location');
+      const countdownSection = document.querySelector('#countdown');
       const countdownDays = document.querySelector('#countdown-days');
       const countdownTime = document.querySelector('#countdown-time');
 
       const heroFirstPhoto = document.querySelector('#hero-first-photo');
       const heroSecondPhoto = document.querySelector('#hero-second-photo');
-      let isMovingToSecondPhoto = false;
+      const scrollSnapTargets = [heroSecondPhoto, gallerySection, locationSection, countdownSection];
+      let isMovingToSnapTarget = false;
+      let musicStartAttemptPending = false;
+      let heroTouchStartX = 0;
       let heroTouchStartY = 0;
       function revealHeroFrame(frame, delay) {
         const reveal = () => window.setTimeout(() => frame.classList.add('is-visible'), delay);
@@ -595,24 +605,36 @@
         if (!entries[0].isIntersecting) return;
         playHeroSequence('#hero-second-photo', [0, 300, 1450]);
         observer.unobserve(heroSecondPhoto);
-      }, { rootMargin: '300px 0px', threshold: .01 });
+      }, { rootMargin: '0px', threshold: .65 });
       secondSequenceObserver.observe(heroSecondPhoto);
 
-      function moveToSecondPhoto() {
-        const firstPhotoBottom = heroFirstPhoto.getBoundingClientRect().bottom;
-        const secondPhotoTop = heroSecondPhoto.getBoundingClientRect().top;
-        if (isMovingToSecondPhoto || firstPhotoBottom > window.innerHeight + 80 || secondPhotoTop <= 0) return false;
-        isMovingToSecondPhoto = true;
-        heroSecondPhoto.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        window.setTimeout(() => { isMovingToSecondPhoto = false; }, 700);
+      function moveToNearbySnapTarget() {
+        if (isMovingToSnapTarget) return false;
+        const target = scrollSnapTargets.find((element) => {
+          const top = element.getBoundingClientRect().top;
+          return top > 8 && top < window.innerHeight * .82;
+        });
+        if (!target) return false;
+        isMovingToSnapTarget = true;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.setTimeout(() => { isMovingToSnapTarget = false; }, 700);
         return true;
       }
       document.addEventListener('wheel', (event) => {
-        if (event.deltaY > 0) moveToSecondPhoto();
+        openInvitation(false);
+        void startMusicFromGesture();
+        if (event.deltaY > 0) moveToNearbySnapTarget();
       }, { passive: true });
-      document.addEventListener('touchstart', (event) => { heroTouchStartY = event.touches[0].clientY; }, { passive: true });
+      document.addEventListener('touchstart', (event) => {
+        openInvitation(false);
+        void startMusicFromGesture();
+        heroTouchStartX = event.touches[0].clientX;
+        heroTouchStartY = event.touches[0].clientY;
+      }, { passive: true });
       document.addEventListener('touchend', (event) => {
-        if (heroTouchStartY - event.changedTouches[0].clientY > 35) moveToSecondPhoto();
+        const distanceX = event.changedTouches[0].clientX - heroTouchStartX;
+        const distanceY = heroTouchStartY - event.changedTouches[0].clientY;
+        if (distanceY > 35 && distanceY > Math.abs(distanceX) * 1.2) moveToNearbySnapTarget();
       }, { passive: true });
 
       function updateCountdown() {
@@ -1144,17 +1166,24 @@
         }
       }
 
+      async function startMusicFromGesture() {
+        if (!music.paused || musicStartAttemptPending) return;
+        musicStartAttemptPending = true;
+        await playMusic();
+        musicStartAttemptPending = false;
+      }
+
       let invitationStarted = false;
-      loadingStart.addEventListener('click', () => {
+      function openInvitation(tryMusic) {
+        if (tryMusic) void startMusicFromGesture();
         if (invitationStarted) return;
         invitationStarted = true;
         loadingStart.disabled = true;
-        void playMusic().then((started) => {
-          if (!started) loadingGuide.textContent = '음악 버튼을 눌러 재생해 주세요';
-        });
         window.setTimeout(() => loadingScreen.classList.add('is-hidden'), 120);
         window.setTimeout(() => playHeroSequence('#hero-first-photo', [0, 200, 850, 1550]), 180);
-      });
+      }
+      loadingStart.addEventListener('click', () => openInvitation(true));
+      window.setTimeout(() => openInvitation(false), 900);
 
       musicControl.addEventListener('click', async () => {
         if (music.paused) {
