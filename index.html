@@ -3,7 +3,1117 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="건우와 지현의 결혼식에 초대합니다.">
     <title>Geonwoo &amp; Jihyun Wedding</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jeju+Myeongjo&amp;display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --ink: #2f2926;
+        --paper: #fcfcfc;
+        --line: #e8e1da;
+        --accent: #a77862;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--paper);
+        font-family: "Jeju Myeongjo", "Apple Myungjo", serif;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        height: 0;
+      }
+
+      .category-nav {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 30;
+        display: grid;
+        align-content: center;
+        width: min(78vw, 310px);
+        padding: 60px 34px;
+        background: rgb(255 253 249 / 98%);
+        box-shadow: 12px 0 30px rgb(42 32 26 / 14%);
+        transform: translateX(-105%);
+        transition: transform .35s ease;
+      }
+
+      .category-nav.is-open { transform: translateX(0); }
+
+      .category-nav a {
+        padding: 14px 0;
+        color: inherit;
+        border-bottom: 1px solid var(--line);
+        font-size: 16px;
+        text-decoration: none;
+      }
+
+      .category-nav a:hover,
+      .category-nav a:focus-visible { color: var(--accent); }
+
+      main { max-width: 600px; margin: 0 auto; }
+      section {
+        display: grid;
+        min-height: 62vh;
+        place-content: center;
+        padding: 72px 28px;
+        border-bottom: 1px solid var(--line);
+        text-align: center;
+      }
+
+      .eyebrow { margin: 0 0 12px; color: var(--accent); font-size: 12px; letter-spacing: .14em; }
+      h1, h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
+      h1 { font-size: clamp(38px, 10vw, 58px); }
+      h2 { font-size: 28px; }
+      .placeholder { margin: 16px 0 0; color: #766d68; font-size: 15px; line-height: 1.8; }
+      .photo-pair {
+        display: grid;
+        gap: 104px;
+        width: 100%;
+        margin: 0;
+      }
+      .photo-frame {
+        aspect-ratio: 2 / 3;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        margin: 0;
+        background: #e7dfd8;
+        color: #82776f;
+        font-size: 13px;
+      }
+      .photo-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .photo-frame.hero-sequence { position: relative; display: block; }
+      .hero-sequence img { position: absolute; inset: 0; opacity: 0; transition: opacity .4s ease-in-out; }
+      .second-sequence img { transition-duration: .5s; }
+      .hero-sequence img.is-visible { opacity: 1; }
+      .third-photo-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; margin-top: 104px; }
+      .half-photo { width: 100%; margin: 0; }
+      .third-message { padding: 0 22px 0 6px; color: #625b57; font-size: 13px; line-height: 1.8; text-align: left; }
+      .third-message p { margin: 0 0 18px; }
+      .third-message p:last-child { margin-bottom: 0; }
+      .wide-photo { width: 100%; aspect-ratio: 3 / 2; margin: 52px 0 0; }
+      .fourth-message { margin-top: 30px; color: #625b57; font-size: 14px; line-height: 1.8; text-align: center; }
+      .fourth-message p { margin: 0 0 18px; }
+      .fourth-message p:last-child { margin-bottom: 0; }
+      #home {
+        display: block;
+        min-height: auto;
+        padding: 0;
+      }
+      .opening-message {
+        padding: 72px 30px 32px;
+        font-size: 16px;
+        line-height: 2;
+        text-align: center;
+        word-break: keep-all;
+      }
+      .opening-message p { margin: 0; }
+      .opening-message p + p { margin-top: 32px; }
+      .family-info {
+        padding: 28px 30px 72px;
+        font-size: clamp(15px, 4.2vw, 18px);
+        line-height: 2.1;
+        text-align: center;
+        word-break: keep-all;
+      }
+      .family-info p { margin: 0; }
+      .family-info p + p { margin-top: 8px; }
+      .family-info strong { font-weight: 700; }
+      .relationship { font-size: .78em; }
+      .family-info .ceremony-summary {
+        margin: 56px 0 0;
+        font-size: clamp(17px, 4.6vw, 21px);
+        line-height: 1.9;
+      }
+      .contact-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 130px;
+        min-height: 48px;
+        margin-top: 42px;
+        border: 1px solid var(--ink);
+        border-radius: 999px;
+        color: var(--ink);
+        background: transparent;
+        font: inherit;
+        font-size: 15px;
+        text-decoration: none;
+      }
+      .contact-link:hover, .contact-link:focus-visible { background: var(--ink); color: var(--paper); }
+      .contact-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        background: rgb(30 25 22 / 52%);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .25s ease, visibility .25s ease;
+      }
+      .contact-modal.is-open { opacity: 1; visibility: visible; }
+      .account-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 85;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        background: rgb(30 25 22 / 52%);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .25s ease, visibility .25s ease;
+      }
+      .account-modal.is-open { opacity: 1; visibility: visible; }
+      .contact-panel {
+        position: relative;
+        width: min(100%, 460px);
+        max-height: min(80vh, 720px);
+        overflow-y: auto;
+        padding: 50px 16px 24px;
+        background: var(--paper);
+      }
+      .contact-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 38px;
+        height: 38px;
+        border: 0;
+        background: transparent;
+        color: var(--ink);
+        font: 30px/1 sans-serif;
+        cursor: pointer;
+      }
+      .contact-panel > h2, .contact-notice { text-align: center; }
+      .contact-notice { margin: 12px 0 0; color: #8d8580; font-size: 13px; }
+      .contact-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 10px; width: 100%; margin-top: 28px; margin-left: -10px; }
+      .contact-group { padding: 4px 0; }
+      .contact-group + .contact-group { border-left: 1px solid var(--line); }
+      .contact-row { display: grid; grid-template-columns: minmax(0, 1fr) max-content; gap: 8px; align-items: center; min-height: 58px; }
+      .contact-role { color: #766d68; font-size: 16px; text-align: right; white-space: nowrap; }
+      .contact-row:first-child { position: relative; }
+      .contact-role--primary { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+      .contact-actions { display: flex; grid-column: 2; gap: 4px; }
+      .contact-actions a { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #f3f1ef; color: var(--ink); font-size: 16px; text-decoration: none; }
+      .contact-actions a:last-child { font-size: 21px; }
+      .account-button { display: inline-flex; align-items: center; justify-content: center; min-width: 180px; min-height: 52px; border: 1px solid var(--ink); border-radius: 999px; color: var(--ink); background: transparent; font: inherit; font-size: 16px; text-decoration: none; cursor: pointer; }
+      .account-button:hover, .account-button:focus-visible { color: var(--paper); background: var(--ink); }
+      .account-note { margin: 0 0 24px; color: #766d68; font-size: 14px; line-height: 1.85; }
+      .contact-account-link { width: 100%; margin-top: 18px; }
+      .account-panel { position: relative; width: min(100%, 460px); max-height: min(80vh, 720px); overflow-y: auto; padding: 50px 22px 24px; background: var(--paper); }
+      .account-panel .account-note { margin: 18px 0 0; text-align: center; }
+      .account-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 26px; }
+      .account-group + .account-group { border-left: 1px solid var(--line); }
+      .account-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px; min-height: 68px; border-bottom: 1px solid var(--line); }
+      .account-detail { display: grid; gap: 10px; min-width: 0; }
+      .account-role { color: #766d68; font-size: 14px; }
+      .account-number { color: var(--ink); font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 12px; letter-spacing: .02em; white-space: nowrap; }
+      .copy-account { position: relative; display: grid; width: 32px; height: 32px; place-items: center; border: 0; border-radius: 50%; color: var(--ink); background: #f3f1ef; font-size: 17px; cursor: pointer; transition: color .22s ease, background .22s ease, transform .22s ease; }
+      .copy-account::after { position: absolute; color: #fff; content: "✓"; font-family: sans-serif; font-size: 16px; font-weight: 700; opacity: 0; transform: scale(.45) rotate(-18deg); transition: opacity .2s ease, transform .28s cubic-bezier(.2, .8, .2, 1); }
+      .copy-account.copied { color: transparent; background: #5d4537; transform: scale(1.08); }
+      .copy-account.copied::after { opacity: 1; transform: scale(1) rotate(0); }
+      .venue-info { width: min(100%, 480px); margin: 0 auto; text-align: center; }
+      .venue-address { margin: 14px 0 28px; color: #766d68; font-size: 14px; line-height: 1.7; }
+      .venue-map-wrap { overflow: hidden; width: 100%; aspect-ratio: 1 / 1; background: transparent; }
+      .venue-map { display: block; width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+      .map-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+      .map-links a { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; border: 1px solid var(--line); color: var(--ink); font-size: 13px; text-decoration: none; }
+      .map-links a:hover, .map-links a:focus-visible { border-color: var(--ink); }
+      .transport-guide { margin-top: 36px; border-top: 1px solid var(--line); text-align: center; }
+      .transport-guide > div { padding: 20px 0; border-bottom: 1px solid var(--line); }
+      .transport-guide h3 { margin: 0 0 10px; font-size: 17px; font-weight: 700; }
+      .transport-guide p { margin: 0; color: #766d68; font-size: 14px; line-height: 1.8; }
+      #countdown { min-height: auto; padding: 64px 28px; }
+      #account { min-height: auto; padding: 64px 28px; }
+      /* Temporarily hidden; keep the markup and account details for later restoration. */
+      .category-nav a[href="#account"],
+      #account,
+      #account-modal,
+      .contact-account-link { display: none !important; }
+      .calendar-date { margin: 0 0 18px; color: var(--ink); font-size: 16px; }
+      .week-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; max-width: 340px; margin: 0 auto 40px; font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+      .week-calendar span { display: grid; gap: 7px; place-items: center; color: #8d8580; font-size: 10px; }
+      .week-calendar strong { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 50%; color: var(--ink); font-size: 13px; font-weight: 400; }
+      .week-calendar .is-wedding-day { color: var(--accent); }
+      .week-calendar .is-wedding-day strong { color: #fff; background: var(--accent); }
+      .countdown-label { margin: 0 0 14px; color: #766d68; font-size: 14px; }
+      .countdown-days { margin: 0; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: 34px; }
+      .countdown-time { margin: 12px 0 0; color: #766d68; font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 13px; letter-spacing: .08em; }
+      .gallery-section { display: block; min-height: auto; padding: 64px 28px 54px; }
+      .gallery-main { position: relative; width: 100%; aspect-ratio: 2 / 3; overflow: hidden; isolation: isolate; background: #e7dfd8; touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+      .gallery-main.is-dragging { cursor: grabbing; }
+      .gallery-main img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+      #gallery-main-image { z-index: 1; }
+      .gallery-turn-canvas { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; opacity: 0; pointer-events: none; will-change: contents; }
+      .gallery-main.is-turning .gallery-turn-canvas { opacity: 1; }
+      .gallery-main.is-turning { cursor: grabbing; }
+      .gallery-counter { margin: 10px 0 16px; color: #a39b95; font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 11px; text-align: right; }
+      .gallery-thumbnails { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; padding-bottom: 8px; scroll-snap-type: x proximity; scrollbar-width: none; touch-action: pan-x; cursor: grab; -webkit-overflow-scrolling: touch; }
+      .gallery-thumbnails.is-dragging { cursor: grabbing; user-select: none; }
+      .gallery-thumbnails::-webkit-scrollbar { display: none; }
+      .gallery-thumbnails-wrap { position: relative; }
+      .gallery-thumbnail-next { position: absolute; top: 50%; right: -4px; z-index: 2; width: 32px; height: 44px; border: 0; color: var(--ink); background: linear-gradient(90deg, transparent, rgb(252 252 252 / 92%) 38%); font: 28px/1 sans-serif; cursor: pointer; transform: translateY(-58%); }
+      .gallery-pair { flex: 0 0 23%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; scroll-snap-align: start; }
+      .gallery-thumbnail { aspect-ratio: 2 / 3; padding: 0; overflow: hidden; border: 1px solid transparent; background: #e7dfd8; cursor: pointer; }
+      .gallery-thumbnail.is-active { border-color: var(--ink); }
+      .gallery-thumbnail img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+      .music-control {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 20;
+        display: grid;
+        width: 44px;
+        height: 44px;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        color: var(--ink);
+        background: rgb(255 253 249 / 92%);
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .music-icon { grid-area: 1 / 1; line-height: 1; transition: opacity .18s ease; }
+      .music-icon--muted { position: relative; }
+      .music-icon--muted::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1px;
+        height: 21px;
+        background: currentColor;
+        content: "";
+        transform: translate(-50%, -50%) rotate(42deg);
+      }
+      .music-control[aria-pressed="true"] .music-icon--muted,
+      .music-control[aria-pressed="false"] .music-icon--playing { opacity: 0; }
+      .menu-control {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 40;
+        display: grid;
+        width: 44px;
+        height: 44px;
+        place-content: center;
+        gap: 5px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        background: rgb(255 253 249 / 92%);
+        cursor: pointer;
+      }
+      .menu-control span {
+        display: block;
+        width: 17px;
+        height: 1px;
+        background: var(--ink);
+        transition: transform .25s ease, opacity .25s ease;
+      }
+      .menu-control.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+      .menu-control.is-open span:nth-child(2) { opacity: 0; }
+      .menu-control.is-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+      .loading-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: grid;
+        place-items: center;
+        padding: 32px;
+        color: #fff;
+        background: rgb(0 0 0 / 68%);
+        text-align: center;
+        transition: opacity .7s ease, visibility .7s ease;
+      }
+      .loading-screen.is-hidden { opacity: 0; visibility: hidden; }
+      .loading-start {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-content: center;
+        gap: 24px;
+        width: 100%;
+        height: 100%;
+        padding: 32px;
+        border: 0;
+        color: inherit;
+        background: transparent;
+        font: inherit;
+        text-align: center;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .loading-message {
+        display: block;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(25px, 7vw, 36px);
+        font-weight: 400;
+        line-height: 1.55;
+      }
+      .loading-guide {
+        color: rgb(255 255 255 / 76%);
+        font-size: 12px;
+        letter-spacing: .12em;
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <div class="loading-screen">
+      <button class="loading-start" type="button" aria-label="청첩장 시작 및 배경 음악 재생">
+        <span class="loading-message">소중한 분들을<br>저희의 시작에 초대합니다.</span>
+        <span class="loading-guide">화면을 터치해 주세요</span>
+      </button>
+    </div>
+    <audio id="background-music" src="assets/music.m4a" loop preload="auto" playsinline></audio>
+    <button class="menu-control" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="category-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <button class="music-control" type="button" aria-label="배경 음악 재생" aria-pressed="false">
+      <span class="music-icon music-icon--playing" aria-hidden="true">♪</span>
+      <span class="music-icon music-icon--muted" aria-hidden="true">♪</span>
+    </button>
+    <header class="site-header">
+      <nav class="category-nav" id="category-nav" aria-label="청첩장 메뉴">
+        <a href="#home">홈</a>
+        <a href="#location">오시는 길</a>
+        <a href="#account">마음 전하실 곳</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home">
+        <div class="photo-pair" aria-label="두 사람의 사진">
+          <figure class="photo-frame hero-sequence" id="hero-first-photo">
+            <img class="is-visible" src="assets/hero-1.jpg" alt="건우와 지현의 사진">
+            <img src="assets/hero-2.jpg" alt="">
+            <img src="assets/hero-3.jpg" alt="">
+            <img src="assets/hero-4.jpg" alt="">
+          </figure>
+          <figure class="photo-frame hero-sequence second-sequence" id="hero-second-photo">
+            <img class="is-visible" src="assets/hero-second-1.jpg" alt="건우와 지현의 사진">
+            <img src="assets/hero-second-2.jpg" alt="">
+            <img src="assets/hero-second-3.jpg" alt="">
+          </figure>
+        </div>
+        <div class="third-photo-row">
+          <div class="third-message">
+            <p>신랑은<br>곁에 있으면 가장 나답고<br>편안해지는 사람입니다.</p>
+            <p>사소한 순간에도<br>늘 저의 마음을 먼저 헤아려주고,<br>필요한 순간에는 망설임 없이 손을 내밀어주는<br>따뜻한 마음을 지녔습니다.</p>
+            <p>한결같이 곁을 지켜주는<br>든든하고 믿음직한 사람입니다.</p>
+            <p>-지현</p>
+          </div>
+          <figure class="photo-frame half-photo">
+            <img src="assets/image3.jpg" alt="이미지 3" onerror="this.remove()">
+            <span>이미지 3</span>
+          </figure>
+        </div>
+        <figure class="photo-frame wide-photo">
+          <img src="assets/image4.jpg" alt="이미지 4" onerror="this.remove()">
+          <span>이미지 4</span>
+        </figure>
+        <div class="fourth-message" id="fourth-message">
+          <p>신부는<br>바라보기만 해도 미소 짓게 만드는 사람입니다.</p>
+          <p>밝은 에너지로 주변을 환하게 만들고,<br>지친 순간이 와도 따뜻한 말과 다정한 마음으로<br>다시 힘을 낼 수 있게 해줍니다.</p>
+          <p>사랑스러운 모습 뒤에<br>삶을 야무지게 꾸려가는 단단함을 지닌,<br>알수록 더 매력적인 사람입니다.</p>
+          <p>- 건우</p>
+        </div>
+        <div class="opening-message">
+          <p>평범한 하루도<br>감사하게 되었습니다.</p>
+          <p>좋은 날도 서툰 날도<br>서로의 손을 잡고<br>나란히 나이 들어가고 싶습니다.</p>
+          <p>이제 부부라는 이름으로 평생을 약속합니다.</p>
+          <p>그 약속의 첫날,<br>소중한 분들을 모시고 기쁨을 나누고자 합니다.<br>따뜻한 마음으로 함께해 주시면 감사하겠습니다.</p>
+        </div>
+        <div class="family-info">
+          <p><strong>박찬호 · 신은정</strong> <span class="relationship">의 차남</span> <strong>건우</strong></p>
+          <p><strong>김영희 · 김지영</strong> <span class="relationship">의 차녀</span> <strong>지현</strong></p>
+          <p class="ceremony-summary">2026년 10월 10일 토요일 오전 11시<br><strong>더 레이나 웨딩홀</strong></p>
+        </div>
+      </section>
+
+      <section class="gallery-section" aria-label="사진 갤러리">
+        <div class="gallery-main" id="gallery-main">
+          <img id="gallery-main-image" src="assets/gallery/gallery-01.jpg" alt="결혼 사진 1" draggable="false">
+          <canvas class="gallery-turn-canvas" id="gallery-turn-canvas" aria-hidden="true"></canvas>
+        </div>
+        <p class="gallery-counter"><span id="gallery-current">1</span>/<span id="gallery-total">16</span></p>
+        <div class="gallery-thumbnails-wrap">
+          <div class="gallery-thumbnails" id="gallery-thumbnails" aria-label="사진 선택"></div>
+          <button class="gallery-thumbnail-next" id="gallery-thumbnail-next" type="button" aria-label="다음 사진 보기">›</button>
+        </div>
+      </section>
+      <section id="location">
+        <div class="venue-info">
+          <h2>오시는 길</h2>
+          <p class="venue-address">더 레이나 웨딩홀<br>경기도 의정부시 호암로 95 에벤에셀관</p>
+          <div class="venue-map-wrap">
+            <img class="venue-map" src="assets/venue-map.png" alt="더 레이나 웨딩홀 오시는 길 지도" loading="lazy">
+          </div>
+          <div class="map-links" aria-label="길찾기 앱 선택">
+            <a href="https://map.naver.com/p/search/%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80" target="_blank" rel="noreferrer">네이버 지도</a>
+            <a href="https://m.map.kakao.com/scheme/search?q=%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80" target="_blank" rel="noreferrer">카카오맵</a>
+            <a href="tmap://search?name=%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80">T맵</a>
+          </div>
+          <div class="transport-guide">
+            <div><h3>주차 안내</h3><p>경기 의정부시 호암로 95 에벤에셀관 1F (호원동 117-1)<br>에벤에셀관 B1 주차장</p></div>
+            <div><h3>지하철</h3><p>망월사역 4번 출구 도보 1분 거리</p></div>
+            <div><h3>버스</h3><p>망월사역 3번 출구 하차<br>7, 36, 39, 56, 72, 72-3, 106-1, 118, 133, 8409, 206-1</p></div>
+          </div>
+        </div>
+      </section>
+      <section id="countdown" aria-label="예식 카운트다운">
+        <div>
+          <p class="calendar-date">2026. 10. 10. 토요일</p>
+          <div class="week-calendar" aria-label="2026년 10월 4일부터 10일까지">
+            <span>일<strong>4</strong></span><span>월<strong>5</strong></span><span>화<strong>6</strong></span><span>수<strong>7</strong></span><span>목<strong>8</strong></span><span>금<strong>9</strong></span><span class="is-wedding-day">토<strong>10</strong></span>
+          </div>
+          <p class="countdown-label">우리의 시작까지</p>
+          <p class="countdown-days" id="countdown-days">D-00</p>
+          <p class="countdown-time" id="countdown-time">00 : 00 : 00</p>
+        </div>
+      </section>
+      <section id="account"><div><p class="account-note">멀리서 축하의 마음을 전해 주시는 분들을 위해<br>조심스러운 마음으로 안내드립니다.<br>보내주시는 따뜻한 마음에 깊이 감사드립니다.</p><button class="account-button" type="button" data-open-account>마음 전하실 곳</button></div></section>
+      <div class="contact-modal" id="contact" aria-hidden="true">
+        <div class="contact-panel" role="dialog" aria-modal="true" aria-labelledby="contact-title">
+          <button class="contact-close" type="button" aria-label="연락하기 창 닫기">×</button>
+          <h2>연락하기</h2>
+          <p class="contact-notice">안심번호로 연결됩니다.</p>
+          <div class="contact-list">
+            <div class="contact-group">
+              <div class="contact-row"><span class="contact-role contact-role--primary">신랑</span><div class="contact-actions"><a href="#" aria-label="신랑에게 전화" data-contact="신랑 전화">☎</a><a href="#" aria-label="신랑에게 문자" data-contact="신랑 문자">✉</a></div></div>
+              <div class="contact-row"><span class="contact-role">신랑 아버지</span><div class="contact-actions"><a href="#" aria-label="신랑 아버지에게 전화" data-contact="신랑 아버지 전화">☎</a><a href="#" aria-label="신랑 아버지에게 문자" data-contact="신랑 아버지 문자">✉</a></div></div>
+              <div class="contact-row"><span class="contact-role">신랑 어머니</span><div class="contact-actions"><a href="#" aria-label="신랑 어머니에게 전화" data-contact="신랑 어머니 전화">☎</a><a href="#" aria-label="신랑 어머니에게 문자" data-contact="신랑 어머니 문자">✉</a></div></div>
+            </div>
+            <div class="contact-group">
+              <div class="contact-row"><span class="contact-role contact-role--primary">신부</span><div class="contact-actions"><a href="#" aria-label="신부에게 전화" data-contact="신부 전화">☎</a><a href="#" aria-label="신부에게 문자" data-contact="신부 문자">✉</a></div></div>
+              <div class="contact-row"><span class="contact-role">신부 아버지</span><div class="contact-actions"><a href="#" aria-label="신부 아버지에게 전화" data-contact="신부 아버지 전화">☎</a><a href="#" aria-label="신부 아버지에게 문자" data-contact="신부 아버지 문자">✉</a></div></div>
+              <div class="contact-row"><span class="contact-role">신부 어머니</span><div class="contact-actions"><a href="#" aria-label="신부 어머니에게 전화" data-contact="신부 어머니 전화">☎</a><a href="#" aria-label="신부 어머니에게 문자" data-contact="신부 어머니 문자">✉</a></div></div>
+            </div>
+          </div>
+          <a class="account-button contact-account-link" href="#account" data-close-contact data-open-account>마음 전하실 곳</a>
+        </div>
+      </div>
+      <div class="account-modal" id="account-modal" aria-hidden="true">
+        <div class="account-panel" role="dialog" aria-modal="true" aria-labelledby="account-title">
+          <button class="contact-close account-close" type="button" aria-label="마음 전하실 곳 창 닫기">×</button>
+          <h2 id="account-title">마음 전하실 곳</h2>
+          <p class="account-note">멀리서 축하의 마음을 전해 주시는 분들을 위해<br>조심스러운 마음으로 안내드립니다.<br>보내주시는 따뜻한 마음에 깊이 감사드립니다.</p>
+          <div class="account-list">
+            <div class="account-group">
+              <div class="account-row"><div class="account-detail"><span class="account-role">신랑</span><span class="account-number">000-000-0000</span></div><button class="copy-account" type="button" data-account="000-000-0000" aria-label="신랑 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 아버지</span><span class="account-number">000-000-0000</span></div><button class="copy-account" type="button" data-account="000-000-0000" aria-label="신랑 아버지 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 어머니</span><span class="account-number">000-000-0000</span></div><button class="copy-account" type="button" data-account="000-000-0000" aria-label="신랑 어머니 계좌번호 복사">⧉</button></div>
+            </div>
+            <div class="account-group">
+              <div class="account-row"><div class="account-detail"><span class="account-role">신부</span><span class="account-number">000-000-0000</span></div><button class="copy-account" type="button" data-account="000-000-0000" aria-label="신부 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신부 아버지</span><span class="account-number">000-000-0000</span></div><button class="copy-account" type="button" data-account="000-000-0000" aria-label="신부 아버지 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신부 어머니</span><span class="account-number">000-000-0000</span></div><button class="copy-account" type="button" data-account="000-000-0000" aria-label="신부 어머니 계좌번호 복사">⧉</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      const music = document.querySelector('#background-music');
+      const musicControl = document.querySelector('.music-control');
+      const loadingScreen = document.querySelector('.loading-screen');
+      const loadingStart = document.querySelector('.loading-start');
+      const loadingGuide = document.querySelector('.loading-guide');
+      const menuControl = document.querySelector('.menu-control');
+      const categoryNav = document.querySelector('.category-nav');
+      const contactModal = document.querySelector('.contact-modal');
+      const accountModal = document.querySelector('#account-modal');
+      const openContact = document.querySelector('#open-contact');
+      const closeContact = document.querySelector('.contact-close');
+      const closeAccount = document.querySelector('.account-close');
+      const galleryMain = document.querySelector('#gallery-main');
+      const galleryMainImage = document.querySelector('#gallery-main-image');
+      const galleryTurnCanvas = document.querySelector('#gallery-turn-canvas');
+      const galleryTurnContext = galleryTurnCanvas.getContext('2d');
+      const galleryCurrent = document.querySelector('#gallery-current');
+      const galleryTotal = document.querySelector('#gallery-total');
+      const galleryThumbnails = document.querySelector('#gallery-thumbnails');
+      const galleryThumbnailNext = document.querySelector('#gallery-thumbnail-next');
+      const countdownDays = document.querySelector('#countdown-days');
+      const countdownTime = document.querySelector('#countdown-time');
+
+      const heroFirstPhoto = document.querySelector('#hero-first-photo');
+      const heroSecondPhoto = document.querySelector('#hero-second-photo');
+      let isMovingToSecondPhoto = false;
+      let heroTouchStartY = 0;
+      function playHeroSequence(selector, delays) {
+        document.querySelectorAll(`${selector} img`).forEach((frame, index) => {
+          if (index === 0) return;
+          window.setTimeout(() => frame.classList.add('is-visible'), delays[index]);
+        });
+      }
+      const secondSequenceObserver = new IntersectionObserver((entries, observer) => {
+        if (!entries[0].isIntersecting) return;
+        playHeroSequence('#hero-second-photo', [0, 300, 1450]);
+        observer.unobserve(heroSecondPhoto);
+      }, { threshold: .8 });
+      secondSequenceObserver.observe(heroSecondPhoto);
+
+      function moveToSecondPhoto() {
+        const firstPhotoBottom = heroFirstPhoto.getBoundingClientRect().bottom;
+        const secondPhotoTop = heroSecondPhoto.getBoundingClientRect().top;
+        if (isMovingToSecondPhoto || firstPhotoBottom > window.innerHeight + 80 || secondPhotoTop <= 0) return false;
+        isMovingToSecondPhoto = true;
+        heroSecondPhoto.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.setTimeout(() => { isMovingToSecondPhoto = false; }, 700);
+        return true;
+      }
+      document.addEventListener('wheel', (event) => {
+        if (event.deltaY > 0 && moveToSecondPhoto()) event.preventDefault();
+      }, { passive: false });
+      document.addEventListener('touchstart', (event) => { heroTouchStartY = event.touches[0].clientY; }, { passive: true });
+      document.addEventListener('touchend', (event) => {
+        if (heroTouchStartY - event.changedTouches[0].clientY > 35) moveToSecondPhoto();
+      }, { passive: true });
+
+      function updateCountdown() {
+        const remaining = new Date('2026-10-10T11:00:00+09:00').getTime() - Date.now();
+        if (remaining <= 0) {
+          countdownDays.textContent = 'D-DAY';
+          countdownTime.textContent = '00 : 00 : 00';
+          return;
+        }
+        const totalSeconds = Math.floor(remaining / 1000);
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        countdownDays.textContent = `D-${days}`;
+        countdownTime.textContent = [hours, minutes, seconds].map((value) => String(value).padStart(2, '0')).join(' : ');
+      }
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      function toggleMenu(forceOpen) {
+        const isOpen = forceOpen ?? !categoryNav.classList.contains('is-open');
+        categoryNav.classList.toggle('is-open', isOpen);
+        menuControl.classList.toggle('is-open', isOpen);
+        menuControl.setAttribute('aria-expanded', String(isOpen));
+        menuControl.setAttribute('aria-label', isOpen ? '메뉴 닫기' : '메뉴 열기');
+      }
+
+      menuControl.addEventListener('click', () => toggleMenu());
+      categoryNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => toggleMenu(false)));
+      function toggleContact(forceOpen) {
+        const isOpen = forceOpen ?? !contactModal.classList.contains('is-open');
+        contactModal.classList.toggle('is-open', isOpen);
+        contactModal.setAttribute('aria-hidden', String(!isOpen));
+      }
+      openContact?.addEventListener('click', () => toggleContact(true));
+      closeContact.addEventListener('click', () => toggleContact(false));
+      contactModal.addEventListener('click', (event) => { if (event.target === contactModal) toggleContact(false); });
+      document.querySelectorAll('[data-close-contact]').forEach((link) => link.addEventListener('click', () => toggleContact(false)));
+      function toggleAccount(forceOpen) {
+        const isOpen = forceOpen ?? !accountModal.classList.contains('is-open');
+        accountModal.classList.toggle('is-open', isOpen);
+        accountModal.setAttribute('aria-hidden', String(!isOpen));
+      }
+      document.querySelectorAll('[data-open-account]').forEach((button) => button.addEventListener('click', (event) => { event.preventDefault(); toggleAccount(true); }));
+      closeAccount.addEventListener('click', () => toggleAccount(false));
+      accountModal.addEventListener('click', (event) => { if (event.target === accountModal) toggleAccount(false); });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') { toggleContact(false); toggleAccount(false); }
+      });
+      document.querySelectorAll('.copy-account').forEach((button) => button.addEventListener('click', async () => {
+        const accountNumber = button.dataset.account;
+        try {
+          await navigator.clipboard.writeText(accountNumber);
+        } catch {
+          const copyArea = document.createElement('textarea');
+          copyArea.value = accountNumber;
+          document.body.append(copyArea);
+          copyArea.select();
+          document.execCommand('copy');
+          copyArea.remove();
+        }
+        button.classList.add('copied');
+        clearTimeout(button.copyResetTimer);
+        button.copyResetTimer = setTimeout(() => button.classList.remove('copied'), 1500);
+      }));
+      document.querySelectorAll('[data-contact]').forEach((link) => link.addEventListener('click', (event) => {
+        event.preventDefault();
+        window.alert('연락처를 등록하면 연결됩니다.');
+      }));
+
+      const galleryImageCount = 16;
+      galleryTotal.textContent = galleryImageCount;
+      let selectedGalleryIndex = 1;
+      const availableGalleryIndexes = [];
+      let galleryTurnTargetIndex = null;
+      let galleryTurnDirection = 0;
+      let galleryTurnState = 'idle';
+      let galleryTurnProgress = 0;
+      let galleryTurnOriginalSrc = '';
+      let galleryTurnOriginalAlt = '';
+      let galleryTurnSnapshot = null;
+      let galleryTurnWidth = 0;
+      let galleryTurnHeight = 0;
+      let galleryTurnPixelRatio = 1;
+      let galleryTurnAnimationFrame = 0;
+
+      function getGalleryImagePath(index) {
+        return `assets/gallery/gallery-${String(index).padStart(2, '0')}.jpg`;
+      }
+
+      function syncGallerySelection(index) {
+        selectedGalleryIndex = index;
+        galleryMainImage.src = getGalleryImagePath(index);
+        galleryMainImage.alt = `결혼 사진 ${index}`;
+        galleryCurrent.textContent = index;
+        galleryThumbnails.querySelectorAll('.gallery-thumbnail').forEach((thumbnail) => {
+          thumbnail.classList.toggle('is-active', Number(thumbnail.dataset.index) === index);
+        });
+      }
+
+      function getAdjacentGalleryIndex(direction) {
+        if (!availableGalleryIndexes.length) return selectedGalleryIndex;
+        const currentPosition = availableGalleryIndexes.indexOf(selectedGalleryIndex);
+        const safePosition = currentPosition < 0 ? 0 : currentPosition;
+        const nextPosition = (safePosition + direction + availableGalleryIndexes.length) % availableGalleryIndexes.length;
+        return availableGalleryIndexes[nextPosition];
+      }
+
+      function drawGalleryImageCover(context, image, width, height) {
+        const imageRatio = image.naturalWidth / image.naturalHeight;
+        const frameRatio = width / height;
+        let sourceWidth = image.naturalWidth;
+        let sourceHeight = image.naturalHeight;
+        let sourceX = 0;
+        let sourceY = 0;
+        if (imageRatio > frameRatio) {
+          sourceWidth = image.naturalHeight * frameRatio;
+          sourceX = (image.naturalWidth - sourceWidth) / 2;
+        } else {
+          sourceHeight = image.naturalWidth / frameRatio;
+          sourceY = (image.naturalHeight - sourceHeight) / 2;
+        }
+        context.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
+      }
+
+      function captureGalleryPage() {
+        galleryTurnWidth = galleryMain.clientWidth;
+        galleryTurnHeight = galleryMain.clientHeight;
+        galleryTurnPixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        galleryTurnCanvas.width = Math.round(galleryTurnWidth * galleryTurnPixelRatio);
+        galleryTurnCanvas.height = Math.round(galleryTurnHeight * galleryTurnPixelRatio);
+        galleryTurnSnapshot = document.createElement('canvas');
+        galleryTurnSnapshot.width = galleryTurnCanvas.width;
+        galleryTurnSnapshot.height = galleryTurnCanvas.height;
+        const snapshotContext = galleryTurnSnapshot.getContext('2d');
+        snapshotContext.setTransform(galleryTurnPixelRatio, 0, 0, galleryTurnPixelRatio, 0, 0);
+        drawGalleryImageCover(snapshotContext, galleryMainImage, galleryTurnWidth, galleryTurnHeight);
+        galleryTurnContext.setTransform(galleryTurnPixelRatio, 0, 0, galleryTurnPixelRatio, 0, 0);
+      }
+
+      function traceGalleryPolygon(context, points) {
+        context.moveTo(points[0].x, points[0].y);
+        points.slice(1).forEach((point) => context.lineTo(point.x, point.y));
+        context.closePath();
+      }
+
+      function clipGalleryPolygon(points, signedDistance, keepFoldedSide) {
+        const clipped = [];
+        points.forEach((current, index) => {
+          const previous = points[(index + points.length - 1) % points.length];
+          const currentDistance = signedDistance(current);
+          const previousDistance = signedDistance(previous);
+          const currentInside = keepFoldedSide ? currentDistance >= 0 : currentDistance <= 0;
+          const previousInside = keepFoldedSide ? previousDistance >= 0 : previousDistance <= 0;
+          if (currentInside !== previousInside) {
+            const amount = previousDistance / (previousDistance - currentDistance);
+            clipped.push({
+              x: previous.x + ((current.x - previous.x) * amount),
+              y: previous.y + ((current.y - previous.y) * amount)
+            });
+          }
+          if (currentInside) clipped.push(current);
+        });
+        return clipped;
+      }
+
+      function getGalleryPageFold(progress, forward) {
+        const width = galleryTurnWidth;
+        const height = galleryTurnHeight;
+        const page = [{ x: 0, y: 0 }, { x: width, y: 0 }, { x: width, y: height }, { x: 0, y: height }];
+        if (progress <= .001) return { unfolded: page, folded: [], crease: [], drag: null };
+
+        const corner = { x: forward ? width : 0, y: height };
+        const drag = {
+          x: forward ? width - (width * 2.15 * progress) : width * 2.15 * progress,
+          y: height - (height * .38 * Math.sin(progress * Math.PI))
+        };
+        const middle = { x: (corner.x + drag.x) / 2, y: (corner.y + drag.y) / 2 };
+        const normal = { x: corner.x - drag.x, y: corner.y - drag.y };
+        const normalLength = Math.hypot(normal.x, normal.y);
+        const unitNormal = { x: normal.x / normalLength, y: normal.y / normalLength };
+        const signedDistance = (point) => ((point.x - middle.x) * unitNormal.x) + ((point.y - middle.y) * unitNormal.y);
+        const unfolded = clipGalleryPolygon(page, signedDistance, false);
+        const foldedOriginal = clipGalleryPolygon(page, signedDistance, true);
+        const folded = foldedOriginal.map((point) => {
+          const distance = signedDistance(point);
+          return {
+            x: point.x - (2 * distance * unitNormal.x),
+            y: point.y - (2 * distance * unitNormal.y)
+          };
+        });
+        const crease = [];
+        page.forEach((current, index) => {
+          const previous = page[(index + page.length - 1) % page.length];
+          const currentDistance = signedDistance(current);
+          const previousDistance = signedDistance(previous);
+          if ((currentDistance >= 0) === (previousDistance >= 0)) return;
+          const amount = previousDistance / (previousDistance - currentDistance);
+          crease.push({
+            x: previous.x + ((current.x - previous.x) * amount),
+            y: previous.y + ((current.y - previous.y) * amount)
+          });
+        });
+        return { unfolded, folded, crease, drag };
+      }
+
+      function drawGalleryPageTurn(progress) {
+        if (!galleryTurnSnapshot) return;
+        galleryTurnProgress = Math.max(0, Math.min(1, progress));
+        const width = galleryTurnWidth;
+        const height = galleryTurnHeight;
+        const forward = galleryTurnDirection > 0;
+        const turnCurve = Math.sin(galleryTurnProgress * Math.PI);
+        const fold = getGalleryPageFold(galleryTurnProgress, forward);
+        const context = galleryTurnContext;
+
+        context.clearRect(0, 0, width, height);
+
+        if (fold.unfolded.length >= 3) {
+          context.save();
+          context.beginPath();
+          traceGalleryPolygon(context, fold.unfolded);
+          context.clip();
+          context.drawImage(galleryTurnSnapshot, 0, 0, galleryTurnSnapshot.width, galleryTurnSnapshot.height, 0, 0, width, height);
+          context.restore();
+        }
+
+        if (fold.folded.length >= 3) {
+          context.save();
+          context.beginPath();
+          traceGalleryPolygon(context, fold.folded);
+          context.clip();
+          const paperBack = context.createLinearGradient(
+            fold.crease[0]?.x || width / 2,
+            fold.crease[0]?.y || height / 2,
+            fold.drag?.x || width / 2,
+            fold.drag?.y || height / 2
+          );
+          paperBack.addColorStop(0, '#d7d1cb');
+          paperBack.addColorStop(.18, '#f0ece8');
+          paperBack.addColorStop(1, '#fffefa');
+          context.fillStyle = paperBack;
+          context.fillRect(-width, -height, width * 3, height * 3);
+          context.restore();
+        }
+
+        if (fold.crease.length === 2) {
+          context.save();
+          context.beginPath();
+          context.moveTo(fold.crease[0].x, fold.crease[0].y);
+          context.lineTo(fold.crease[1].x, fold.crease[1].y);
+          context.lineWidth = 1;
+          context.strokeStyle = `rgb(255 255 255 / ${.36 + (.26 * turnCurve)})`;
+          context.shadowColor = `rgb(34 28 24 / ${.14 + (.12 * turnCurve)})`;
+          context.shadowBlur = 3 + (3 * turnCurve);
+          context.stroke();
+          context.restore();
+        }
+      }
+
+      function setGalleryTurnVisual(progress) {
+        drawGalleryPageTurn(progress);
+      }
+
+      function clearGalleryTurnStyles() {
+        window.cancelAnimationFrame(galleryTurnAnimationFrame);
+        galleryTurnAnimationFrame = 0;
+        galleryTurnContext.clearRect(0, 0, galleryTurnWidth, galleryTurnHeight);
+        galleryTurnSnapshot = null;
+        galleryMain.classList.remove('is-turning');
+        galleryTurnTargetIndex = null;
+        galleryTurnDirection = 0;
+        galleryTurnProgress = 0;
+        galleryTurnOriginalSrc = '';
+        galleryTurnOriginalAlt = '';
+        galleryTurnState = 'idle';
+      }
+
+      function prepareGalleryTurn(index, direction) {
+        if (galleryTurnState !== 'idle' || index === selectedGalleryIndex) return false;
+        galleryTurnTargetIndex = index;
+        galleryTurnDirection = direction;
+        galleryTurnOriginalSrc = galleryMainImage.currentSrc || galleryMainImage.src;
+        galleryTurnOriginalAlt = galleryMainImage.alt;
+        captureGalleryPage();
+        galleryMainImage.src = getGalleryImagePath(index);
+        galleryMainImage.alt = `결혼 사진 ${index}`;
+        galleryMain.classList.add('is-turning');
+        galleryTurnState = 'dragging';
+        setGalleryTurnVisual(0);
+        return true;
+      }
+
+      function animateGalleryTurn(targetProgress, duration, easing, onFinish) {
+        const startingProgress = galleryTurnProgress;
+        const startedAt = performance.now();
+        window.cancelAnimationFrame(galleryTurnAnimationFrame);
+        function animate(now) {
+          const elapsed = Math.min(1, (now - startedAt) / duration);
+          const nextProgress = startingProgress + ((targetProgress - startingProgress) * easing(elapsed));
+          setGalleryTurnVisual(nextProgress);
+          if (elapsed < 1) {
+            galleryTurnAnimationFrame = window.requestAnimationFrame(animate);
+            return;
+          }
+          galleryTurnAnimationFrame = 0;
+          onFinish();
+        }
+        galleryTurnAnimationFrame = window.requestAnimationFrame(animate);
+      }
+
+      function completeGalleryTurn() {
+        if (galleryTurnState !== 'dragging') return;
+        galleryTurnState = 'completing';
+        const duration = Math.max(260, Math.round(780 * (1 - galleryTurnProgress)));
+        const easing = (value) => .5 - (Math.cos(Math.PI * value) / 2);
+        animateGalleryTurn(1, duration, easing, () => {
+          syncGallerySelection(galleryTurnTargetIndex);
+          clearGalleryTurnStyles();
+        });
+      }
+
+      function cancelGalleryTurn() {
+        if (galleryTurnState !== 'dragging') return;
+        galleryTurnState = 'cancelling';
+        const duration = Math.max(180, Math.round(480 * galleryTurnProgress));
+        const easing = (value) => 1 - Math.pow(1 - value, 3);
+        animateGalleryTurn(0, duration, easing, () => {
+          galleryMainImage.src = galleryTurnOriginalSrc;
+          galleryMainImage.alt = galleryTurnOriginalAlt;
+          clearGalleryTurnStyles();
+        });
+      }
+
+      function selectGalleryImage(index, direction = 0) {
+        if (!direction || index === selectedGalleryIndex) {
+          if (galleryTurnState === 'idle') syncGallerySelection(index);
+          return;
+        }
+        if (!prepareGalleryTurn(index, direction)) return;
+        completeGalleryTurn();
+      }
+
+      for (let startIndex = 1; startIndex <= galleryImageCount; startIndex += 2) {
+        const pair = document.createElement('div');
+        pair.className = 'gallery-pair';
+        for (let index = startIndex; index <= Math.min(startIndex + 1, galleryImageCount); index += 1) {
+          const imageNumber = String(index).padStart(2, '0');
+          const thumbnail = document.createElement('button');
+          const image = document.createElement('img');
+          thumbnail.type = 'button';
+          thumbnail.className = `gallery-thumbnail${index === 1 ? ' is-active' : ''}`;
+          thumbnail.dataset.index = index;
+          thumbnail.setAttribute('aria-label', `사진 ${index} 보기`);
+          image.src = `assets/gallery/gallery-${imageNumber}.jpg`;
+          image.alt = '';
+          image.draggable = false;
+          image.onload = () => {
+            if (!availableGalleryIndexes.includes(index)) {
+              availableGalleryIndexes.push(index);
+              availableGalleryIndexes.sort((a, b) => a - b);
+            }
+          };
+          image.onerror = () => {
+            thumbnail.remove();
+            if (!pair.childElementCount) pair.remove();
+          };
+          thumbnail.append(image);
+          thumbnail.addEventListener('click', () => {
+            const direction = index === selectedGalleryIndex ? 0 : index > selectedGalleryIndex ? 1 : -1;
+            selectGalleryImage(index, direction);
+          });
+          pair.append(thumbnail);
+        }
+        galleryThumbnails.append(pair);
+      }
+
+      function moveGallery(direction) {
+        if (!availableGalleryIndexes.length) return;
+        const currentPosition = availableGalleryIndexes.indexOf(selectedGalleryIndex);
+        const safePosition = currentPosition < 0 ? 0 : currentPosition;
+        const nextPosition = (safePosition + direction + availableGalleryIndexes.length) % availableGalleryIndexes.length;
+        selectGalleryImage(availableGalleryIndexes[nextPosition], direction);
+      }
+      let gallerySwipeStartX = 0;
+      let gallerySwipeStartedAt = 0;
+      let gallerySwipePointerId = null;
+      galleryMain.addEventListener('pointerdown', (event) => {
+        if (galleryTurnState !== 'idle' || (event.pointerType === 'mouse' && event.button !== 0)) return;
+        gallerySwipeStartX = event.clientX;
+        gallerySwipeStartedAt = performance.now();
+        gallerySwipePointerId = event.pointerId;
+        galleryMain.classList.add('is-dragging');
+        galleryMain.setPointerCapture(event.pointerId);
+      });
+      galleryMain.addEventListener('pointermove', (event) => {
+        if (event.pointerId !== gallerySwipePointerId) return;
+        const swipeDistance = event.clientX - gallerySwipeStartX;
+        if (galleryTurnState === 'idle') {
+          if (Math.abs(swipeDistance) < 8) return;
+          const direction = swipeDistance < 0 ? 1 : -1;
+          const targetIndex = getAdjacentGalleryIndex(direction);
+          if (targetIndex === selectedGalleryIndex || !prepareGalleryTurn(targetIndex, direction)) return;
+        }
+        if (galleryTurnState !== 'dragging') return;
+        const directionalDistance = galleryTurnDirection > 0 ? -swipeDistance : swipeDistance;
+        const progress = directionalDistance / galleryMain.clientWidth;
+        if (event.cancelable && progress > 0) event.preventDefault();
+        setGalleryTurnVisual(progress);
+      }, { passive: false });
+      galleryMain.addEventListener('pointerup', (event) => {
+        if (event.pointerId !== gallerySwipePointerId) return;
+        const swipeDistance = event.clientX - gallerySwipeStartX;
+        const swipeDuration = performance.now() - gallerySwipeStartedAt;
+        if (galleryMain.hasPointerCapture(event.pointerId)) galleryMain.releasePointerCapture(event.pointerId);
+        galleryMain.classList.remove('is-dragging');
+        gallerySwipePointerId = null;
+        if (galleryTurnState !== 'dragging') return;
+        const isQuickFlick = Math.abs(swipeDistance) > 32 && swipeDuration < 350;
+        if (galleryTurnProgress >= .16 || isQuickFlick) completeGalleryTurn();
+        else cancelGalleryTurn();
+      });
+      galleryMain.addEventListener('pointercancel', (event) => {
+        if (event.pointerId !== gallerySwipePointerId) return;
+        galleryMain.classList.remove('is-dragging');
+        gallerySwipePointerId = null;
+        if (galleryTurnState === 'dragging') cancelGalleryTurn();
+      });
+      galleryThumbnails.addEventListener('wheel', (event) => {
+        const scrollDistance = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+        if (!scrollDistance) return;
+        event.preventDefault();
+        galleryThumbnails.scrollLeft += scrollDistance;
+      }, { passive: false });
+      // PC 마우스 드래그는 포인터를 즉시 고정해 이미지 기본 드래그와 영역 이탈의 영향을 받지 않게 합니다.
+      // 터치 환경은 브라우저의 자연스러운 가로 스와이프를 그대로 사용합니다.
+      let thumbnailDragStartX = 0;
+      let thumbnailDragStartScrollLeft = 0;
+      let thumbnailDragPointerId = null;
+      let thumbnailPressedButton = null;
+      let isThumbnailDragging = false;
+      let suppressThumbnailClick = false;
+      galleryThumbnails.addEventListener('pointerdown', (event) => {
+        if (event.pointerType !== 'mouse' || event.button !== 0) return;
+        thumbnailDragStartX = event.clientX;
+        thumbnailDragStartScrollLeft = galleryThumbnails.scrollLeft;
+        thumbnailDragPointerId = event.pointerId;
+        thumbnailPressedButton = event.target.closest('.gallery-thumbnail');
+        isThumbnailDragging = false;
+        suppressThumbnailClick = false;
+        galleryThumbnails.setPointerCapture(event.pointerId);
+      });
+      galleryThumbnails.addEventListener('pointermove', (event) => {
+        if (event.pointerId !== thumbnailDragPointerId) return;
+        const dragDistance = event.clientX - thumbnailDragStartX;
+        if (!isThumbnailDragging && Math.abs(dragDistance) < 6) return;
+        isThumbnailDragging = true;
+        suppressThumbnailClick = true;
+        if (event.cancelable) event.preventDefault();
+        galleryThumbnails.classList.add('is-dragging');
+        galleryThumbnails.scrollLeft = thumbnailDragStartScrollLeft - dragDistance;
+      }, { passive: false });
+      galleryThumbnails.addEventListener('pointerup', (event) => {
+        if (event.pointerId !== thumbnailDragPointerId) return;
+        const wasDragging = isThumbnailDragging;
+        const pressedButton = thumbnailPressedButton;
+        if (galleryThumbnails.hasPointerCapture(event.pointerId)) galleryThumbnails.releasePointerCapture(event.pointerId);
+        galleryThumbnails.classList.remove('is-dragging');
+        thumbnailDragPointerId = null;
+        thumbnailPressedButton = null;
+        isThumbnailDragging = false;
+        if (!wasDragging && pressedButton) {
+          suppressThumbnailClick = true;
+          const index = Number(pressedButton.dataset.index);
+          const direction = index === selectedGalleryIndex ? 0 : index > selectedGalleryIndex ? 1 : -1;
+          selectGalleryImage(index, direction);
+        }
+        if (suppressThumbnailClick) window.setTimeout(() => { suppressThumbnailClick = false; }, 0);
+      });
+      galleryThumbnails.addEventListener('pointercancel', (event) => {
+        if (event.pointerId !== thumbnailDragPointerId) return;
+        if (galleryThumbnails.hasPointerCapture(event.pointerId)) galleryThumbnails.releasePointerCapture(event.pointerId);
+        galleryThumbnails.classList.remove('is-dragging');
+        thumbnailDragPointerId = null;
+        thumbnailPressedButton = null;
+        isThumbnailDragging = false;
+        suppressThumbnailClick = false;
+      });
+      galleryThumbnails.addEventListener('click', (event) => {
+        if (!suppressThumbnailClick) return;
+        event.preventDefault();
+        event.stopPropagation();
+        suppressThumbnailClick = false;
+      }, true);
+      galleryThumbnailNext.addEventListener('click', () => galleryThumbnails.scrollBy({ left: galleryThumbnails.clientWidth * .78, behavior: 'smooth' }));
+
+      async function playMusic() {
+        try {
+          await music.play();
+          musicControl.setAttribute('aria-label', '배경 음악 끄기');
+          musicControl.setAttribute('aria-pressed', 'true');
+          return true;
+        } catch {
+          return false;
+        }
+      }
+
+      let invitationStarted = false;
+      loadingStart.addEventListener('click', async () => {
+        if (invitationStarted) return;
+        if (!await playMusic()) {
+          loadingGuide.textContent = '다시 한 번 터치해 주세요';
+          return;
+        }
+        invitationStarted = true;
+        loadingStart.disabled = true;
+        window.setTimeout(() => loadingScreen.classList.add('is-hidden'), 700);
+        window.setTimeout(() => playHeroSequence('#hero-first-photo', [0, 200, 850, 1550]), 800);
+      });
+
+      musicControl.addEventListener('click', async () => {
+        if (music.paused) {
+          await playMusic();
+        } else {
+          music.pause();
+          musicControl.setAttribute('aria-label', '배경 음악 재생');
+          musicControl.setAttribute('aria-pressed', 'false');
+        }
+      });
+
+    </script>
+  </body>
 </html>
