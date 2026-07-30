@@ -21,6 +21,14 @@
     <link rel="icon" href="assets/wedding-rings.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/wedding-rings-180.png" sizes="180x180">
     <link rel="preload" href="assets/fonts/JejuMyeongjo-subset.woff2" as="font" type="font/woff2" crossorigin>
+    <script>
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
+      window.addEventListener('pageshow', () => {
+        window.scrollTo(0, 0);
+        window.requestAnimationFrame(() => window.scrollTo(0, 0));
+      });
+    </script>
     <style>
       @font-face {
         font-family: "Jeju Myeongjo";
@@ -275,6 +283,10 @@
       .transport-guide > div:last-child { padding-bottom: 0; }
       .transport-guide h3 { margin: 0 0 10px; font-size: 17px; font-weight: 700; }
       .transport-guide p { margin: 0; color: #766d68; font-size: 14px; line-height: 1.8; }
+      .bus-routes { word-break: keep-all; }
+      @media (max-width: 600px) {
+        .bus-routes { font-size: 13px; }
+      }
       #location { padding-bottom: 56px; }
       #countdown { min-height: auto; padding: 64px 28px; }
       #account { min-height: auto; padding: 64px 28px; }
@@ -506,14 +518,14 @@
             <img class="venue-map" src="assets/venue-map.png" alt="더 레이나 웨딩홀 오시는 길 지도" loading="lazy" decoding="async">
           </div>
           <div class="map-links" aria-label="길찾기 앱 선택">
-            <a href="https://map.naver.com/p/search/%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80" target="_blank" rel="noreferrer">네이버 지도</a>
-            <a href="https://m.map.kakao.com/scheme/search?q=%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80" target="_blank" rel="noreferrer">카카오맵</a>
-            <a id="tmap-link" href="tmap://route?goalname=%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80&amp;goalx=127.0445209&amp;goaly=37.7090404">T맵</a>
+            <a href="https://map.naver.com/p/search/%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80" target="_blank" rel="noreferrer" data-map-app data-ios-url="nmap://navigation?dlat=37.7090404&amp;dlng=127.0445209&amp;dname=%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80&amp;appname=https%3A%2F%2F2026-10-10.github.io%2Fgeonwoo-jihyun-wedding%2F" data-android-url="intent://navigation?dlat=37.7090404&amp;dlng=127.0445209&amp;dname=%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80&amp;appname=https%3A%2F%2F2026-10-10.github.io%2Fgeonwoo-jihyun-wedding%2F#Intent;scheme=nmap;package=com.nhn.android.nmap;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.nhn.android.nmap;end" data-ios-store="https://apps.apple.com/kr/app/id311867728" data-android-store="https://play.google.com/store/apps/details?id=com.nhn.android.nmap">네이버 지도</a>
+            <a href="https://m.map.kakao.com/scheme/search?q=%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80" target="_blank" rel="noreferrer" data-map-app data-ios-url="kakaomap://search?q=%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80&amp;p=37.7090404,127.0445209" data-android-url="intent://search?q=%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80&amp;p=37.7090404,127.0445209#Intent;scheme=kakaomap;package=net.daum.android.map;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dnet.daum.android.map;end" data-ios-store="https://apps.apple.com/kr/app/id304608425" data-android-store="https://play.google.com/store/apps/details?id=net.daum.android.map">카카오맵</a>
+            <a id="tmap-link" href="tmap://route?goalname=%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80&amp;goalx=127.0445209&amp;goaly=37.7090404" data-map-app data-ios-url="tmap://route?goalname=%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80&amp;goalx=127.0445209&amp;goaly=37.7090404" data-android-url="intent://route?goalname=%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80&amp;goalx=127.0445209&amp;goaly=37.7090404#Intent;scheme=tmap;package=com.skt.tmap.ku;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.skt.tmap.ku;end" data-ios-store="https://apps.apple.com/kr/app/id431589174" data-android-store="https://play.google.com/store/apps/details?id=com.skt.tmap.ku">T맵</a>
           </div>
           <div class="transport-guide">
             <div><h3>주차 안내</h3><p>경기 의정부시 호암로 95 에벤에셀관 1F (호원동 117-1)<br>에벤에셀관 B1 주차장</p></div>
             <div><h3>지하철</h3><p>망월사역 4번 출구 도보 1분 거리</p></div>
-            <div><h3>버스</h3><p>망월사역 3번 출구 하차<br>7, 36, 39, 56, 72, 72-3, 106-1, 118, 133, 8409, 206-1</p></div>
+            <div><h3>버스</h3><p>망월사역 3번 출구 하차<br><span class="bus-routes">7, 36, 39, 56, 72, 72‑3, 106‑1, 118, 133, 8409, 206‑1</span></p></div>
           </div>
         </div>
       </section>
@@ -1261,13 +1273,31 @@
         }
       });
 
-      const tmapLink = document.querySelector('#tmap-link');
-      tmapLink.addEventListener('click', (event) => {
-        const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || navigator.maxTouchPoints > 1;
-        if (isMobileDevice) return;
+      const mapAppLinks = document.querySelectorAll('[data-map-app]');
+      mapAppLinks.forEach((mapAppLink) => mapAppLink.addEventListener('click', (event) => {
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const isAppleMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        if (!isAndroid && !isAppleMobile) {
+          if (mapAppLink.id !== 'tmap-link') return;
+          event.preventDefault();
+          window.alert('T맵 길안내는 T맵이 설치된 모바일 기기에서 이용해 주세요.');
+          return;
+        }
+
         event.preventDefault();
-        window.alert('T맵 길안내는 T맵이 설치된 모바일 기기에서 이용해 주세요.');
-      });
+        const appUrl = isAndroid ? mapAppLink.dataset.androidUrl : mapAppLink.dataset.iosUrl;
+        const storeUrl = isAndroid ? mapAppLink.dataset.androidStore : mapAppLink.dataset.iosStore;
+        let appOpened = false;
+        const detectAppOpen = () => {
+          if (document.hidden) appOpened = true;
+        };
+        document.addEventListener('visibilitychange', detectAppOpen);
+        window.location.href = appUrl;
+        window.setTimeout(() => {
+          document.removeEventListener('visibilitychange', detectAppOpen);
+          if (!appOpened && !document.hidden) window.location.href = storeUrl;
+        }, 1800);
+      }));
 
     </script>
   </body>
