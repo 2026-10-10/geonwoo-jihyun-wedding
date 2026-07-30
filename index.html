@@ -5,10 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="건우와 지현의 결혼식에 초대합니다.">
     <title>Geonwoo &amp; Jihyun Wedding</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jeju+Myeongjo&amp;display=swap" rel="stylesheet">
+    <link rel="preload" href="assets/fonts/JejuMyeongjo-subset.woff2" as="font" type="font/woff2" crossorigin>
     <style>
+      @font-face {
+        font-family: "Jeju Myeongjo";
+        src: url("assets/fonts/JejuMyeongjo-subset.woff2") format("woff2");
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+      }
+
       :root {
         --ink: #2f2926;
         --paper: #fcfcfc;
@@ -68,11 +74,23 @@
         border-bottom: 1px solid var(--line);
         text-align: center;
       }
+      section:not(#home) {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 720px;
+      }
+      .third-photo-row,
+      .wide-photo,
+      .fourth-message,
+      .opening-message,
+      .family-info {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 420px;
+      }
 
       .eyebrow { margin: 0 0 12px; color: var(--accent); font-size: 12px; letter-spacing: .14em; }
-      h1, h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
-      h1 { font-size: clamp(38px, 10vw, 58px); }
-      h2 { font-size: 28px; }
+      h1, h2 { margin: 0; font-weight: 400; }
+      h1 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(38px, 10vw, 58px); }
+      h2 { font-family: "Jeju Myeongjo", "Apple Myungjo", serif; font-size: 28px; }
       .placeholder { margin: 16px 0 0; color: #766d68; font-size: 15px; line-height: 1.8; }
       .photo-pair {
         display: grid;
@@ -101,7 +119,7 @@
       .hero-sequence img.is-visible { opacity: 1; }
       .third-photo-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; margin-top: 104px; }
       .half-photo { width: 100%; margin: 0; }
-      .third-message { padding: 0 22px 0 6px; color: #625b57; font-size: 13px; line-height: 1.8; text-align: left; }
+      .third-message { padding: 0 22px 0 14px; color: #625b57; font-size: 13px; line-height: 1.8; text-align: left; }
       .third-message p { margin: 0 0 18px; }
       .third-message p:last-child { margin-bottom: 0; }
       .wide-photo { width: 100%; aspect-ratio: 3 / 2; margin: 52px 0 0; }
@@ -328,6 +346,9 @@
       .menu-control.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
       .menu-control.is-open span:nth-child(2) { opacity: 0; }
       .menu-control.is-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+      /* Temporarily hidden; keep the menu markup and behavior for later restoration. */
+      .menu-control,
+      .category-nav { display: none !important; }
       .loading-screen {
         position: fixed;
         inset: 0;
@@ -338,7 +359,7 @@
         color: #fff;
         background: rgb(0 0 0 / 68%);
         text-align: center;
-        transition: opacity .7s ease, visibility .7s ease;
+        transition: opacity .35s ease, visibility .35s ease;
       }
       .loading-screen.is-hidden { opacity: 0; visibility: hidden; }
       .loading-start {
@@ -379,7 +400,7 @@
         <span class="loading-guide">화면을 터치해 주세요</span>
       </button>
     </div>
-    <audio id="background-music" src="assets/music.m4a" loop preload="auto" playsinline></audio>
+    <audio id="background-music" src="assets/music.m4a" loop preload="none" playsinline></audio>
     <button class="menu-control" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="category-nav">
       <span></span><span></span><span></span>
     </button>
@@ -399,31 +420,31 @@
       <section id="home">
         <div class="photo-pair" aria-label="두 사람의 사진">
           <figure class="photo-frame hero-sequence" id="hero-first-photo">
-            <img class="is-visible" src="assets/hero-1.jpg" alt="건우와 지현의 사진">
-            <img src="assets/hero-2.jpg" alt="">
-            <img src="assets/hero-3.jpg" alt="">
-            <img src="assets/hero-4.jpg" alt="">
+            <img class="is-visible" src="assets/hero-1.jpg" alt="건우와 지현의 사진" fetchpriority="high" decoding="async">
+            <img data-src="assets/hero-2.jpg" alt="" decoding="async">
+            <img data-src="assets/hero-3.jpg" alt="" decoding="async">
+            <img data-src="assets/hero-4.jpg" alt="" decoding="async">
           </figure>
           <figure class="photo-frame hero-sequence second-sequence" id="hero-second-photo">
-            <img class="is-visible" src="assets/hero-second-1.jpg" alt="건우와 지현의 사진">
-            <img src="assets/hero-second-2.jpg" alt="">
-            <img src="assets/hero-second-3.jpg" alt="">
+            <img class="is-visible" src="assets/hero-second-1.jpg" alt="건우와 지현의 사진" loading="lazy" decoding="async">
+            <img data-src="assets/hero-second-2.jpg" alt="" decoding="async">
+            <img data-src="assets/hero-second-3.jpg" alt="" decoding="async">
           </figure>
         </div>
         <div class="third-photo-row">
           <div class="third-message">
             <p>신랑은<br>곁에 있으면 가장 나답고<br>편안해지는 사람입니다.</p>
-            <p>사소한 순간에도<br>늘 저의 마음을 먼저 헤아려주고,<br>필요한 순간에는 망설임 없이 손을 내밀어주는<br>따뜻한 마음을 지녔습니다.</p>
+            <p>사소한 순간에도<br>늘 저의 마음을 먼저<br>헤아려주고,<br>필요한 순간에는 망설임 없이<br>손을 내밀어주는<br>따뜻한 마음을 지녔습니다.</p>
             <p>한결같이 곁을 지켜주는<br>든든하고 믿음직한 사람입니다.</p>
             <p>-지현</p>
           </div>
           <figure class="photo-frame half-photo">
-            <img src="assets/image3.jpg" alt="이미지 3" onerror="this.remove()">
+            <img src="assets/image3.jpg" alt="이미지 3" loading="lazy" decoding="async" onerror="this.remove()">
             <span>이미지 3</span>
           </figure>
         </div>
         <figure class="photo-frame wide-photo">
-          <img src="assets/image4.jpg" alt="이미지 4" onerror="this.remove()">
+          <img src="assets/image4.jpg" alt="이미지 4" loading="lazy" decoding="async" onerror="this.remove()">
           <span>이미지 4</span>
         </figure>
         <div class="fourth-message" id="fourth-message">
@@ -447,7 +468,7 @@
 
       <section class="gallery-section" aria-label="사진 갤러리">
         <div class="gallery-main" id="gallery-main">
-          <img id="gallery-main-image" src="assets/gallery/gallery-01.jpg" alt="결혼 사진 1" draggable="false">
+          <img id="gallery-main-image" src="assets/gallery/gallery-01.jpg" alt="결혼 사진 1" draggable="false" loading="lazy" decoding="async">
           <canvas class="gallery-turn-canvas" id="gallery-turn-canvas" aria-hidden="true"></canvas>
         </div>
         <p class="gallery-counter"><span id="gallery-current">1</span>/<span id="gallery-total">16</span></p>
@@ -461,7 +482,7 @@
           <h2>오시는 길</h2>
           <p class="venue-address">더 레이나 웨딩홀<br>경기도 의정부시 호암로 95 에벤에셀관</p>
           <div class="venue-map-wrap">
-            <img class="venue-map" src="assets/venue-map.png" alt="더 레이나 웨딩홀 오시는 길 지도" loading="lazy">
+            <img class="venue-map" src="assets/venue-map.png" alt="더 레이나 웨딩홀 오시는 길 지도" loading="lazy" decoding="async">
           </div>
           <div class="map-links" aria-label="길찾기 앱 선택">
             <a href="https://map.naver.com/p/search/%EB%8D%94%20%EB%A0%88%EC%9D%B4%EB%82%98%20%EC%9B%A8%EB%94%A9%ED%99%80" target="_blank" rel="noreferrer">네이버 지도</a>
@@ -555,17 +576,26 @@
       const heroSecondPhoto = document.querySelector('#hero-second-photo');
       let isMovingToSecondPhoto = false;
       let heroTouchStartY = 0;
+      function revealHeroFrame(frame, delay) {
+        const reveal = () => window.setTimeout(() => frame.classList.add('is-visible'), delay);
+        if (frame.dataset.src) {
+          frame.src = frame.dataset.src;
+          delete frame.dataset.src;
+        }
+        if (frame.complete && frame.naturalWidth) reveal();
+        else frame.addEventListener('load', reveal, { once: true });
+      }
       function playHeroSequence(selector, delays) {
         document.querySelectorAll(`${selector} img`).forEach((frame, index) => {
           if (index === 0) return;
-          window.setTimeout(() => frame.classList.add('is-visible'), delays[index]);
+          revealHeroFrame(frame, delays[index] ?? 0);
         });
       }
       const secondSequenceObserver = new IntersectionObserver((entries, observer) => {
         if (!entries[0].isIntersecting) return;
         playHeroSequence('#hero-second-photo', [0, 300, 1450]);
         observer.unobserve(heroSecondPhoto);
-      }, { threshold: .8 });
+      }, { rootMargin: '300px 0px', threshold: .01 });
       secondSequenceObserver.observe(heroSecondPhoto);
 
       function moveToSecondPhoto() {
@@ -578,8 +608,8 @@
         return true;
       }
       document.addEventListener('wheel', (event) => {
-        if (event.deltaY > 0 && moveToSecondPhoto()) event.preventDefault();
-      }, { passive: false });
+        if (event.deltaY > 0) moveToSecondPhoto();
+      }, { passive: true });
       document.addEventListener('touchstart', (event) => { heroTouchStartY = event.touches[0].clientY; }, { passive: true });
       document.addEventListener('touchend', (event) => {
         if (heroTouchStartY - event.changedTouches[0].clientY > 35) moveToSecondPhoto();
@@ -657,7 +687,8 @@
       const galleryImageCount = 16;
       galleryTotal.textContent = galleryImageCount;
       let selectedGalleryIndex = 1;
-      const availableGalleryIndexes = [];
+      const availableGalleryIndexes = Array.from({ length: galleryImageCount }, (_, index) => index + 1);
+      const galleryImagePreloads = new Map();
       let galleryTurnTargetIndex = null;
       let galleryTurnDirection = 0;
       let galleryTurnState = 'idle';
@@ -674,6 +705,28 @@
         return `assets/gallery/gallery-${String(index).padStart(2, '0')}.jpg`;
       }
 
+      function preloadGalleryImage(index) {
+        if (galleryImagePreloads.has(index)) return galleryImagePreloads.get(index).promise;
+        const image = new Image();
+        image.decoding = 'async';
+        const promise = new Promise((resolve, reject) => {
+          image.addEventListener('load', () => resolve(image), { once: true });
+          image.addEventListener('error', reject, { once: true });
+        });
+        galleryImagePreloads.set(index, { image, promise });
+        image.src = getGalleryImagePath(index);
+        return promise;
+      }
+
+      function preloadGalleryNeighbors(index) {
+        const currentPosition = availableGalleryIndexes.indexOf(index);
+        if (currentPosition < 0) return;
+        [-1, 1].forEach((direction) => {
+          const nextPosition = (currentPosition + direction + availableGalleryIndexes.length) % availableGalleryIndexes.length;
+          void preloadGalleryImage(availableGalleryIndexes[nextPosition]);
+        });
+      }
+
       function syncGallerySelection(index) {
         selectedGalleryIndex = index;
         galleryMainImage.src = getGalleryImagePath(index);
@@ -682,6 +735,7 @@
         galleryThumbnails.querySelectorAll('.gallery-thumbnail').forEach((thumbnail) => {
           thumbnail.classList.toggle('is-active', Number(thumbnail.dataset.index) === index);
         });
+        preloadGalleryNeighbors(index);
       }
 
       function getAdjacentGalleryIndex(direction) {
@@ -923,8 +977,10 @@
           if (galleryTurnState === 'idle') syncGallerySelection(index);
           return;
         }
-        if (!prepareGalleryTurn(index, direction)) return;
-        completeGalleryTurn();
+        void preloadGalleryImage(index).then(() => {
+          if (!prepareGalleryTurn(index, direction)) return;
+          completeGalleryTurn();
+        });
       }
 
       for (let startIndex = 1; startIndex <= galleryImageCount; startIndex += 2) {
@@ -938,15 +994,11 @@
           thumbnail.className = `gallery-thumbnail${index === 1 ? ' is-active' : ''}`;
           thumbnail.dataset.index = index;
           thumbnail.setAttribute('aria-label', `사진 ${index} 보기`);
-          image.src = `assets/gallery/gallery-${imageNumber}.jpg`;
+          image.src = `assets/gallery/thumbs/gallery-${imageNumber}.jpg`;
           image.alt = '';
           image.draggable = false;
-          image.onload = () => {
-            if (!availableGalleryIndexes.includes(index)) {
-              availableGalleryIndexes.push(index);
-              availableGalleryIndexes.sort((a, b) => a - b);
-            }
-          };
+          image.loading = 'lazy';
+          image.decoding = 'async';
           image.onerror = () => {
             thumbnail.remove();
             if (!pair.childElementCount) pair.remove();
@@ -960,6 +1012,7 @@
         }
         galleryThumbnails.append(pair);
       }
+      preloadGalleryNeighbors(selectedGalleryIndex);
 
       function moveGallery(direction) {
         if (!availableGalleryIndexes.length) return;
@@ -1092,16 +1145,15 @@
       }
 
       let invitationStarted = false;
-      loadingStart.addEventListener('click', async () => {
+      loadingStart.addEventListener('click', () => {
         if (invitationStarted) return;
-        if (!await playMusic()) {
-          loadingGuide.textContent = '다시 한 번 터치해 주세요';
-          return;
-        }
         invitationStarted = true;
         loadingStart.disabled = true;
-        window.setTimeout(() => loadingScreen.classList.add('is-hidden'), 700);
-        window.setTimeout(() => playHeroSequence('#hero-first-photo', [0, 200, 850, 1550]), 800);
+        void playMusic().then((started) => {
+          if (!started) loadingGuide.textContent = '음악 버튼을 눌러 재생해 주세요';
+        });
+        window.setTimeout(() => loadingScreen.classList.add('is-hidden'), 120);
+        window.setTimeout(() => playHeroSequence('#hero-first-photo', [0, 200, 850, 1550]), 180);
       });
 
       musicControl.addEventListener('click', async () => {
