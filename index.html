@@ -432,7 +432,7 @@
         <span class="loading-message">소중한 분들을<br>저희의 시작에 초대합니다.</span>
       </button>
     </div>
-    <audio id="background-music" src="assets/music.m4a" loop preload="none" playsinline></audio>
+    <audio id="background-music" src="assets/music.m4a" loop preload="auto" autoplay playsinline></audio>
     <button class="menu-control" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="category-nav">
       <span></span><span></span><span></span>
     </button>
@@ -1250,6 +1250,11 @@
         await playMusic();
         musicStartAttemptPending = false;
       }
+
+      // 브라우저가 허용하는 환경에서는 로딩 화면부터 음악을 시작합니다.
+      // 자동 재생이 차단되면 기존의 첫 터치·스크롤 재생이 바로 이어받습니다.
+      music.load();
+      void playMusic();
 
       let invitationStarted = false;
       function openInvitation(tryMusic) {
