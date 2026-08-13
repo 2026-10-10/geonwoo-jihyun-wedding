@@ -20,7 +20,7 @@
     <link rel="icon" href="assets/wedding-rings-512.png" type="image/png" sizes="512x512">
     <link rel="icon" href="assets/wedding-rings.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/wedding-rings-180.png" sizes="180x180">
-    <link rel="preload" href="assets/fonts/JejuMyeongjo-subset.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/JejuMyeongjo-subset.woff2?v=20260813-2" as="font" type="font/woff2" crossorigin>
     <script>
       if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
       window.scrollTo(0, 0);
@@ -32,7 +32,7 @@
     <style>
       @font-face {
         font-family: "Jeju Myeongjo";
-        src: url("assets/fonts/JejuMyeongjo-subset.woff2") format("woff2");
+        src: url("assets/fonts/JejuMyeongjo-subset.woff2?v=20260813-2") format("woff2");
         font-style: normal;
         font-weight: 400;
         font-display: swap;
@@ -250,7 +250,7 @@
       .contact-group + .contact-group { border-left: 0; }
       .contact-row { display: grid; grid-template-columns: minmax(0, 1fr) max-content; gap: 8px; align-items: center; min-height: 58px; }
       .contact-row:not(:first-child) { grid-template-columns: max-content max-content; justify-content: center; gap: 14px; }
-      .contact-role { color: #766d68; font-size: 16px; font-weight: 400; text-align: left; white-space: nowrap; }
+      .contact-role { color: #766d68; font-family: "Jeju Myeongjo", "Apple Myungjo", serif; font-size: 16px; font-weight: 400; text-align: left; white-space: nowrap; }
       .contact-row:first-child { position: relative; }
       .contact-role--primary { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
       .contact-actions { display: flex; grid-column: 2; gap: 4px; }
@@ -277,13 +277,13 @@
       .account-row:last-child { border-bottom: 0; }
       .account-detail { display: grid; gap: 6px; min-width: 0; }
       .account-role { color: #766d68; font-size: 14px; }
-      .account-number { display: flex; align-items: center; gap: 4px; color: var(--ink); font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 12px; letter-spacing: .02em; white-space: nowrap; }
+      .account-number { display: flex; align-items: center; gap: 4px; margin-top: 2px; color: var(--ink); font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 12px; letter-spacing: .02em; white-space: nowrap; }
       .account-bank, .account-number-value { white-space: nowrap; }
       .account-holder { color: var(--ink); font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 12px; letter-spacing: .02em; }
       @media (max-width: 480px) {
         .account-row { min-height: 0; padding: 14px 0; }
         .account-detail { gap: 2px; }
-        .account-number { display: grid; gap: 2px; margin-top: 4px; font-size: 11px; white-space: normal; }
+        .account-number { display: grid; gap: 2px; margin-top: 6px; font-size: 11px; white-space: normal; }
         .account-holder { font-size: 11px; }
       }
       .copy-account { position: relative; display: grid; width: 32px; height: 32px; place-items: center; border: 0; border-radius: 50%; color: var(--ink); background: #f3f1ef; font-size: 17px; cursor: pointer; transition: color .22s ease, background .22s ease, transform .22s ease; }
@@ -519,7 +519,7 @@
           <img id="gallery-main-image" src="assets/gallery/gallery-01.jpg" alt="결혼 사진 1" draggable="false" loading="lazy" decoding="async">
           <canvas class="gallery-turn-canvas" id="gallery-turn-canvas" aria-hidden="true"></canvas>
         </div>
-        <p class="gallery-counter"><span id="gallery-current">1</span>/<span id="gallery-total">16</span></p>
+        <p class="gallery-counter"><span id="gallery-current">1</span>/<span id="gallery-total">15</span></p>
         <div class="gallery-thumbnails-wrap">
           <button class="gallery-thumbnail-arrow gallery-thumbnail-prev" id="gallery-thumbnail-prev" type="button" aria-label="이전 사진 목록 보기" hidden>‹</button>
           <div class="gallery-thumbnails" id="gallery-thumbnails" aria-label="사진 선택"></div>
@@ -750,7 +750,7 @@
         window.alert('연락처를 등록하면 연결됩니다.');
       }));
 
-      const galleryImageCount = 16;
+      const galleryImageCount = 15;
       galleryTotal.textContent = galleryImageCount;
       let selectedGalleryIndex = 1;
       const availableGalleryIndexes = Array.from({ length: galleryImageCount }, (_, index) => index + 1);
