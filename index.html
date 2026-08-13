@@ -227,7 +227,7 @@
         width: min(100%, 460px);
         max-height: min(80vh, 720px);
         overflow-y: auto;
-        padding: 50px 16px 24px;
+        padding: 50px 24px 24px;
         background: var(--paper);
       }
       .contact-close {
@@ -244,25 +244,37 @@
       }
       .contact-panel > h2, .contact-notice { text-align: center; }
       .contact-notice { margin: 12px 0 0; color: #8d8580; font-size: 13px; }
-      .contact-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 10px; width: 100%; margin-top: 28px; margin-left: -10px; }
-      .contact-group { padding: 4px 0; }
-      .contact-group + .contact-group { border-left: 1px solid var(--line); }
+      .contact-list { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 0; width: 100%; margin: 28px 0 0; }
+      .contact-list::after { position: absolute; top: 14px; bottom: 14px; left: 50%; width: 1px; background: var(--line); content: ""; pointer-events: none; transform: translateX(-.5px); }
+      .contact-group { padding: 4px 14px; }
+      .contact-group + .contact-group { border-left: 0; }
       .contact-row { display: grid; grid-template-columns: minmax(0, 1fr) max-content; gap: 8px; align-items: center; min-height: 58px; }
-      .contact-role { color: #766d68; font-size: 16px; text-align: right; white-space: nowrap; }
+      .contact-row:not(:first-child) { grid-template-columns: max-content max-content; justify-content: center; gap: 14px; }
+      .contact-role { color: #766d68; font-size: 16px; text-align: left; white-space: nowrap; }
       .contact-row:first-child { position: relative; }
       .contact-role--primary { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
       .contact-actions { display: flex; grid-column: 2; gap: 4px; }
       .contact-actions a { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #f3f1ef; color: var(--ink); font-size: 16px; text-decoration: none; }
       .contact-actions a:last-child { font-size: 21px; }
+      @media (max-width: 420px) {
+        .contact-panel { padding-right: 12px; padding-left: 12px; }
+        .contact-group { padding-right: 8px; padding-left: 8px; }
+        .contact-row { gap: 4px; }
+        .contact-row:not(:first-child) { gap: 8px; }
+        .contact-role { font-size: 14px; }
+        .contact-actions a { width: 32px; height: 32px; }
+      }
       .account-button { display: inline-flex; align-items: center; justify-content: center; min-width: 180px; min-height: 52px; border: 1px solid var(--ink); border-radius: 999px; color: var(--ink); background: transparent; font: inherit; font-size: 16px; text-decoration: none; cursor: pointer; }
       .account-button:hover, .account-button:focus-visible { color: var(--paper); background: var(--ink); }
       .account-note { margin: 0 0 24px; color: #766d68; font-size: 14px; line-height: 1.85; }
       .contact-account-link { width: 100%; margin-top: 18px; }
       .account-panel { position: relative; width: min(100%, 460px); max-height: min(80vh, 720px); overflow-y: auto; padding: 50px 22px 24px; background: var(--paper); }
+      .account-panel > h2 { text-align: center; }
       .account-panel .account-note { margin: 18px 0 0; text-align: center; }
       .account-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 26px; }
-      .account-group + .account-group { border-left: 1px solid var(--line); }
+      .account-group + .account-group { padding-left: 12px; border-left: 1px solid var(--line); }
       .account-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px; min-height: 68px; border-bottom: 1px solid var(--line); }
+      .account-row:last-child { border-bottom: 0; }
       .account-detail { display: grid; gap: 10px; min-width: 0; }
       .account-role { color: #766d68; font-size: 14px; }
       .account-number { color: var(--ink); font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 12px; letter-spacing: .02em; white-space: nowrap; }
@@ -290,11 +302,6 @@
       #location { padding-bottom: 56px; }
       #countdown { min-height: auto; padding: 64px 28px; }
       #account { min-height: auto; padding: 64px 28px; }
-      /* Temporarily hidden; keep the markup and account details for later restoration. */
-      .category-nav a[href="#account"],
-      #account,
-      #account-modal,
-      .contact-account-link { display: none !important; }
       .calendar-date { margin: 0 0 18px; color: var(--ink); font-size: 16px; }
       .week-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; max-width: 340px; margin: 0 auto 40px; font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
       .week-calendar span { display: grid; gap: 7px; place-items: center; color: #8d8580; font-size: 10px; }
@@ -494,6 +501,7 @@
         <div class="family-info">
           <p><strong>박찬호 · 신은정</strong> <span class="relationship">의 차남</span> <strong>건우</strong></p>
           <p><strong>김영희 · 김지영</strong> <span class="relationship">의 차녀</span> <strong>지현</strong></p>
+          <button class="contact-link" id="open-contact" type="button">연락하기</button>
           <p class="ceremony-summary">2026년 10월 10일 토요일 오전 11시<br>더 레이나 웨딩홀</p>
         </div>
       </section>
@@ -545,17 +553,15 @@
         <div class="contact-panel" role="dialog" aria-modal="true" aria-labelledby="contact-title">
           <button class="contact-close" type="button" aria-label="연락하기 창 닫기">×</button>
           <h2>연락하기</h2>
-          <p class="contact-notice">안심번호로 연결됩니다.</p>
           <div class="contact-list">
             <div class="contact-group">
-              <div class="contact-row"><span class="contact-role contact-role--primary">신랑</span><div class="contact-actions"><a href="#" aria-label="신랑에게 전화" data-contact="신랑 전화">☎</a><a href="#" aria-label="신랑에게 문자" data-contact="신랑 문자">✉</a></div></div>
-              <div class="contact-row"><span class="contact-role">신랑 아버지</span><div class="contact-actions"><a href="#" aria-label="신랑 아버지에게 전화" data-contact="신랑 아버지 전화">☎</a><a href="#" aria-label="신랑 아버지에게 문자" data-contact="신랑 아버지 문자">✉</a></div></div>
-              <div class="contact-row"><span class="contact-role">신랑 어머니</span><div class="contact-actions"><a href="#" aria-label="신랑 어머니에게 전화" data-contact="신랑 어머니 전화">☎</a><a href="#" aria-label="신랑 어머니에게 문자" data-contact="신랑 어머니 문자">✉</a></div></div>
+              <div class="contact-row"><span class="contact-role contact-role--primary">신랑</span></div>
+              <div class="contact-row"><span class="contact-role">신랑 아버지</span><div class="contact-actions"><a href="tel:01056355949" aria-label="신랑 아버지에게 전화">☎</a><a href="sms:01056355949" aria-label="신랑 아버지에게 문자">✉</a></div></div>
+              <div class="contact-row"><span class="contact-role">신랑 어머니</span><div class="contact-actions"><a href="tel:01043795949" aria-label="신랑 어머니에게 전화">☎</a><a href="sms:01043795949" aria-label="신랑 어머니에게 문자">✉</a></div></div>
             </div>
             <div class="contact-group">
-              <div class="contact-row"><span class="contact-role contact-role--primary">신부</span><div class="contact-actions"><a href="#" aria-label="신부에게 전화" data-contact="신부 전화">☎</a><a href="#" aria-label="신부에게 문자" data-contact="신부 문자">✉</a></div></div>
-              <div class="contact-row"><span class="contact-role">신부 아버지</span><div class="contact-actions"><a href="#" aria-label="신부 아버지에게 전화" data-contact="신부 아버지 전화">☎</a><a href="#" aria-label="신부 아버지에게 문자" data-contact="신부 아버지 문자">✉</a></div></div>
-              <div class="contact-row"><span class="contact-role">신부 어머니</span><div class="contact-actions"><a href="#" aria-label="신부 어머니에게 전화" data-contact="신부 어머니 전화">☎</a><a href="#" aria-label="신부 어머니에게 문자" data-contact="신부 어머니 문자">✉</a></div></div>
+              <div class="contact-row"><span class="contact-role contact-role--primary">신부</span></div>
+              <div class="contact-row"><span class="contact-role">신부 부모님</span><div class="contact-actions"><a href="tel:01053545885" aria-label="신부 부모님에게 전화">☎</a><a href="sms:01053545885" aria-label="신부 부모님에게 문자">✉</a></div></div>
             </div>
           </div>
           <a class="account-button contact-account-link" href="#account" data-close-contact data-open-account>마음 전하실 곳</a>
@@ -568,14 +574,14 @@
           <p class="account-note">멀리서 축하의 마음을 전해 주시는 분들을 위해<br>조심스러운 마음으로 안내드립니다.<br>보내주시는 따뜻한 마음에 깊이 감사드립니다.</p>
           <div class="account-list">
             <div class="account-group">
-              <div class="account-row"><div class="account-detail"><span class="account-role">신랑</span><span class="account-number">000-000-0000</span></div><button class="copy-account" type="button" data-account="000-000-0000" aria-label="신랑 계좌번호 복사">⧉</button></div>
-              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 아버지</span><span class="account-number">000-000-0000</span></div><button class="copy-account" type="button" data-account="000-000-0000" aria-label="신랑 아버지 계좌번호 복사">⧉</button></div>
-              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 어머니</span><span class="account-number">000-000-0000</span></div><button class="copy-account" type="button" data-account="000-000-0000" aria-label="신랑 어머니 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 · 박건우</span><span class="account-number">우리은행 1002-956-692206</span></div><button class="copy-account" type="button" data-account="1002956692206" aria-label="신랑 박건우 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 아버지 · 박찬호</span><span class="account-number">농협 352-1455-7577-93</span></div><button class="copy-account" type="button" data-account="3521455757793" aria-label="신랑 아버지 박찬호 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 어머니 · 신은정</span><span class="account-number">농협 201018-56-055363</span></div><button class="copy-account" type="button" data-account="20101856055363" aria-label="신랑 어머니 신은정 계좌번호 복사">⧉</button></div>
             </div>
             <div class="account-group">
-              <div class="account-row"><div class="account-detail"><span class="account-role">신부</span><span class="account-number">000-000-0000</span></div><button class="copy-account" type="button" data-account="000-000-0000" aria-label="신부 계좌번호 복사">⧉</button></div>
-              <div class="account-row"><div class="account-detail"><span class="account-role">신부 아버지</span><span class="account-number">000-000-0000</span></div><button class="copy-account" type="button" data-account="000-000-0000" aria-label="신부 아버지 계좌번호 복사">⧉</button></div>
-              <div class="account-row"><div class="account-detail"><span class="account-role">신부 어머니</span><span class="account-number">000-000-0000</span></div><button class="copy-account" type="button" data-account="000-000-0000" aria-label="신부 어머니 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신부 · 김지현</span><span class="account-number">토스뱅크 1001-5194-2941</span></div><button class="copy-account" type="button" data-account="100151942941" aria-label="신부 김지현 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신부 아버지 · 김영희</span><span class="account-number">카카오뱅크 3333-21-8960261</span></div><button class="copy-account" type="button" data-account="3333218960261" aria-label="신부 아버지 김영희 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신부 어머니 · 김지영</span><span class="account-number">농협 201151-52-236750</span></div><button class="copy-account" type="button" data-account="20115152236750" aria-label="신부 어머니 김지영 계좌번호 복사">⧉</button></div>
             </div>
           </div>
         </div>
@@ -613,6 +619,7 @@
       const scrollSnapTargets = [heroSecondPhoto, gallerySection, locationSection, countdownSection];
       let isMovingToSnapTarget = false;
       let musicStartAttemptPending = false;
+      let musicUserPaused = false;
       let heroTouchStartX = 0;
       let heroTouchStartY = 0;
       function revealHeroFrame(frame, delay) {
@@ -1234,8 +1241,13 @@
       window.requestAnimationFrame(updateGalleryThumbnailArrows);
 
       async function playMusic() {
+        if (musicUserPaused) return false;
         try {
           await music.play();
+          if (musicUserPaused) {
+            music.pause();
+            return false;
+          }
           musicControl.setAttribute('aria-label', '배경 음악 끄기');
           musicControl.setAttribute('aria-pressed', 'true');
           return true;
@@ -1245,7 +1257,7 @@
       }
 
       async function startMusicFromGesture() {
-        if (!music.paused || musicStartAttemptPending) return;
+        if (musicUserPaused || !music.paused || musicStartAttemptPending) return;
         musicStartAttemptPending = true;
         await playMusic();
         musicStartAttemptPending = false;
@@ -1270,8 +1282,10 @@
 
       musicControl.addEventListener('click', async () => {
         if (music.paused) {
+          musicUserPaused = false;
           await playMusic();
         } else {
+          musicUserPaused = true;
           music.pause();
           musicControl.setAttribute('aria-label', '배경 음악 재생');
           musicControl.setAttribute('aria-pressed', 'false');
