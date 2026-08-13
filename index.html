@@ -281,7 +281,9 @@
       .account-bank, .account-number-value { white-space: nowrap; }
       .account-holder { color: var(--ink); font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 12px; letter-spacing: .02em; }
       @media (max-width: 480px) {
-        .account-number { display: grid; gap: 2px; font-size: 11px; white-space: normal; }
+        .account-row { min-height: 0; padding: 14px 0; }
+        .account-detail { gap: 2px; }
+        .account-number { display: grid; gap: 2px; margin-top: 4px; font-size: 11px; white-space: normal; }
         .account-holder { font-size: 11px; }
       }
       .copy-account { position: relative; display: grid; width: 32px; height: 32px; place-items: center; border: 0; border-radius: 50%; color: var(--ink); background: #f3f1ef; font-size: 17px; cursor: pointer; transition: color .22s ease, background .22s ease, transform .22s ease; }
@@ -322,19 +324,13 @@
       .gallery-section,
       #location,
       #countdown { scroll-margin-top: 0; scroll-snap-align: start; scroll-snap-stop: always; }
-      .gallery-main { position: relative; width: 100%; aspect-ratio: 2 / 3; overflow: hidden; isolation: isolate; background: #e7dfd8; touch-action: pan-y; overscroll-behavior: contain; cursor: grab; user-select: none; -webkit-user-select: none; }
+      .gallery-main { position: relative; width: calc(100% + 56px); margin-left: -28px; aspect-ratio: 2 / 3; overflow: hidden; isolation: isolate; background: #e7dfd8; touch-action: pan-y; overscroll-behavior: contain; cursor: grab; user-select: none; -webkit-user-select: none; }
       .gallery-main.is-dragging { cursor: grabbing; }
       .gallery-main img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; user-select: none; -webkit-user-drag: none; }
       #gallery-main-image { z-index: 1; }
       .gallery-turn-canvas { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; opacity: 0; pointer-events: none; will-change: contents; }
       .gallery-main.is-turning .gallery-turn-canvas { opacity: 1; }
       .gallery-main.is-turning { cursor: grabbing; }
-      html.gallery-lightbox-open, html.gallery-lightbox-open body { overflow: hidden; }
-      .gallery-lightbox { position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; background: rgb(18 16 15 / 94%); opacity: 0; visibility: hidden; transition: opacity .22s ease, visibility .22s ease; }
-      .gallery-lightbox.is-open { opacity: 1; visibility: visible; }
-      .gallery-lightbox-stage { display: grid; width: 100%; height: 100%; overflow: hidden; place-items: center; touch-action: none; user-select: none; -webkit-user-select: none; }
-      .gallery-lightbox-image { display: block; max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: auto; transform: translate3d(0, 0, 0) scale(1); transform-origin: center; will-change: transform; user-select: none; -webkit-user-drag: none; }
-      .gallery-lightbox-close { position: absolute; top: max(16px, env(safe-area-inset-top)); right: 16px; z-index: 2; display: grid; width: 42px; height: 42px; padding: 0; place-items: center; border: 0; border-radius: 50%; color: #fff; background: rgb(0 0 0 / 38%); font: 32px/1 sans-serif; cursor: pointer; }
       .gallery-counter { margin: 10px 0 16px; color: #a39b95; font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 11px; text-align: right; }
       .gallery-thumbnails { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; padding-bottom: 8px; scroll-snap-type: x proximity; scrollbar-width: none; touch-action: pan-x; cursor: grab; -webkit-overflow-scrolling: touch; }
       .gallery-thumbnails.is-dragging { cursor: grabbing; user-select: none; }
@@ -519,7 +515,7 @@
       </section>
 
       <section class="gallery-section" aria-label="사진 갤러리">
-        <div class="gallery-main" id="gallery-main" role="button" tabindex="0" aria-label="현재 사진 확대 보기">
+        <div class="gallery-main" id="gallery-main" aria-label="현재 결혼 사진">
           <img id="gallery-main-image" src="assets/gallery/gallery-01.jpg" alt="결혼 사진 1" draggable="false" loading="lazy" decoding="async">
           <canvas class="gallery-turn-canvas" id="gallery-turn-canvas" aria-hidden="true"></canvas>
         </div>
@@ -530,12 +526,6 @@
           <button class="gallery-thumbnail-arrow gallery-thumbnail-next" id="gallery-thumbnail-next" type="button" aria-label="다음 사진 목록 보기">›</button>
         </div>
       </section>
-      <div class="gallery-lightbox" id="gallery-lightbox" aria-hidden="true">
-        <div class="gallery-lightbox-stage" id="gallery-lightbox-stage">
-          <img class="gallery-lightbox-image" id="gallery-lightbox-image" alt="확대된 결혼 사진" draggable="false">
-        </div>
-        <button class="gallery-lightbox-close" type="button" aria-label="확대 사진 닫기">×</button>
-      </div>
       <section id="location">
         <div class="venue-info">
           <h2>오시는 길</h2>
@@ -621,10 +611,6 @@
       const galleryMainImage = document.querySelector('#gallery-main-image');
       const galleryTurnCanvas = document.querySelector('#gallery-turn-canvas');
       const galleryTurnContext = galleryTurnCanvas.getContext('2d');
-      const galleryLightbox = document.querySelector('#gallery-lightbox');
-      const galleryLightboxStage = document.querySelector('#gallery-lightbox-stage');
-      const galleryLightboxImage = document.querySelector('#gallery-lightbox-image');
-      const galleryLightboxClose = document.querySelector('.gallery-lightbox-close');
       const galleryCurrent = document.querySelector('#gallery-current');
       const galleryTotal = document.querySelector('#gallery-total');
       const galleryThumbnails = document.querySelector('#gallery-thumbnails');
@@ -741,7 +727,7 @@
       closeAccount.addEventListener('click', () => toggleAccount(false));
       accountModal.addEventListener('click', (event) => { if (event.target === accountModal) toggleAccount(false); });
       document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') { toggleContact(false); toggleAccount(false); closeGalleryLightbox(); }
+        if (event.key === 'Escape') { toggleContact(false); toggleAccount(false); }
       });
       document.querySelectorAll('.copy-account').forEach((button) => button.addEventListener('click', async () => {
         const accountNumber = button.dataset.account;
@@ -1106,129 +1092,6 @@
       let gallerySwipeStartedAt = 0;
       let gallerySwipePointerId = null;
       let gallerySwipeAxis = '';
-      const galleryZoomPointers = new Map();
-      let galleryZoomScale = 1;
-      let galleryZoomX = 0;
-      let galleryZoomY = 0;
-      let galleryZoomStartX = 0;
-      let galleryZoomStartY = 0;
-      let galleryZoomStartTranslateX = 0;
-      let galleryZoomStartTranslateY = 0;
-      let galleryZoomStartDistance = 0;
-      let galleryZoomStartScale = 1;
-
-      function applyGalleryZoom() {
-        galleryLightboxImage.style.transform = `translate3d(${galleryZoomX}px, ${galleryZoomY}px, 0) scale(${galleryZoomScale})`;
-      }
-
-      function clampGalleryZoomTranslation() {
-        const maxX = Math.max(0, (galleryLightboxImage.offsetWidth * galleryZoomScale - galleryLightboxStage.clientWidth) / 2);
-        const maxY = Math.max(0, (galleryLightboxImage.offsetHeight * galleryZoomScale - galleryLightboxStage.clientHeight) / 2);
-        galleryZoomX = Math.max(-maxX, Math.min(maxX, galleryZoomX));
-        galleryZoomY = Math.max(-maxY, Math.min(maxY, galleryZoomY));
-      }
-
-      function resetGalleryZoom() {
-        galleryZoomPointers.clear();
-        galleryZoomScale = 1;
-        galleryZoomX = 0;
-        galleryZoomY = 0;
-        applyGalleryZoom();
-      }
-
-      function openGalleryLightbox() {
-        galleryLightboxImage.src = galleryMainImage.currentSrc || galleryMainImage.src;
-        galleryLightboxImage.alt = galleryMainImage.alt;
-        resetGalleryZoom();
-        galleryLightbox.classList.add('is-open');
-        galleryLightbox.setAttribute('aria-hidden', 'false');
-        document.documentElement.classList.add('gallery-lightbox-open');
-        galleryLightboxClose.focus({ preventScroll: true });
-      }
-
-      function closeGalleryLightbox() {
-        if (!galleryLightbox.classList.contains('is-open')) return;
-        galleryLightbox.classList.remove('is-open');
-        galleryLightbox.setAttribute('aria-hidden', 'true');
-        document.documentElement.classList.remove('gallery-lightbox-open');
-        resetGalleryZoom();
-        galleryMain.focus({ preventScroll: true });
-      }
-
-      function getGalleryZoomDistance() {
-        const points = Array.from(galleryZoomPointers.values());
-        if (points.length < 2) return 0;
-        return Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y);
-      }
-
-      function rebaseGalleryZoomGesture() {
-        const point = galleryZoomPointers.values().next().value;
-        if (point) {
-          galleryZoomStartX = point.x;
-          galleryZoomStartY = point.y;
-          galleryZoomStartTranslateX = galleryZoomX;
-          galleryZoomStartTranslateY = galleryZoomY;
-        }
-        if (galleryZoomPointers.size >= 2) {
-          galleryZoomStartDistance = getGalleryZoomDistance();
-          galleryZoomStartScale = galleryZoomScale;
-        }
-      }
-
-      galleryLightboxClose.addEventListener('click', closeGalleryLightbox);
-      galleryLightboxStage.addEventListener('click', (event) => {
-        if (event.target === galleryLightboxStage) closeGalleryLightbox();
-      });
-      galleryLightboxStage.addEventListener('pointerdown', (event) => {
-        if (event.pointerType === 'mouse' && event.button !== 0) return;
-        galleryLightboxStage.setPointerCapture(event.pointerId);
-        galleryZoomPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
-        rebaseGalleryZoomGesture();
-      });
-      galleryLightboxStage.addEventListener('pointermove', (event) => {
-        if (!galleryZoomPointers.has(event.pointerId)) return;
-        galleryZoomPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
-        if (galleryZoomPointers.size >= 2) {
-          if (event.cancelable) event.preventDefault();
-          const distance = getGalleryZoomDistance();
-          if (galleryZoomStartDistance) {
-            galleryZoomScale = Math.max(1, Math.min(4, galleryZoomStartScale * distance / galleryZoomStartDistance));
-            if (galleryZoomScale === 1) galleryZoomX = galleryZoomY = 0;
-            clampGalleryZoomTranslation();
-            applyGalleryZoom();
-          }
-          return;
-        }
-        if (galleryZoomScale <= 1) return;
-        if (event.cancelable) event.preventDefault();
-        galleryZoomX = galleryZoomStartTranslateX + event.clientX - galleryZoomStartX;
-        galleryZoomY = galleryZoomStartTranslateY + event.clientY - galleryZoomStartY;
-        clampGalleryZoomTranslation();
-        applyGalleryZoom();
-      }, { passive: false });
-      function releaseGalleryZoomPointer(event) {
-        if (!galleryZoomPointers.has(event.pointerId)) return;
-        if (galleryLightboxStage.hasPointerCapture(event.pointerId)) galleryLightboxStage.releasePointerCapture(event.pointerId);
-        galleryZoomPointers.delete(event.pointerId);
-        rebaseGalleryZoomGesture();
-      }
-      galleryLightboxStage.addEventListener('pointerup', releaseGalleryZoomPointer);
-      galleryLightboxStage.addEventListener('pointercancel', releaseGalleryZoomPointer);
-      galleryLightboxStage.addEventListener('wheel', (event) => {
-        event.preventDefault();
-        galleryZoomScale = Math.max(1, Math.min(4, galleryZoomScale * (event.deltaY < 0 ? 1.15 : .87)));
-        if (galleryZoomScale === 1) galleryZoomX = galleryZoomY = 0;
-        clampGalleryZoomTranslation();
-        applyGalleryZoom();
-      }, { passive: false });
-      galleryLightboxImage.addEventListener('dblclick', () => {
-        galleryZoomScale = galleryZoomScale > 1 ? 1 : 2.5;
-        galleryZoomX = 0;
-        galleryZoomY = 0;
-        clampGalleryZoomTranslation();
-        applyGalleryZoom();
-      });
-
       function snapGallerySectionIntoPlace() {
         const galleryTop = gallerySection.getBoundingClientRect().top;
         if (Math.abs(galleryTop) <= 2 || Math.abs(galleryTop) >= window.innerHeight) return;
@@ -1281,10 +1144,6 @@
         galleryMain.classList.remove('is-dragging');
         gallerySwipePointerId = null;
         gallerySwipeAxis = '';
-        if (!completedAxis && galleryTurnState === 'idle') {
-          openGalleryLightbox();
-          return;
-        }
         if (completedAxis !== 'horizontal' || galleryTurnState !== 'dragging') return;
         const isQuickFlick = Math.abs(swipeDistance) > 32 && swipeDuration < 350;
         if (galleryTurnProgress >= .16 || isQuickFlick) completeGalleryTurn();
@@ -1297,13 +1156,6 @@
         gallerySwipeAxis = '';
         if (galleryTurnState === 'dragging') cancelGalleryTurn();
       });
-      galleryMain.addEventListener('keydown', (event) => {
-        if ((event.key === 'Enter' || event.key === ' ') && galleryTurnState === 'idle') {
-          event.preventDefault();
-          openGalleryLightbox();
-        }
-      });
-
       let galleryTouchStartX = 0;
       let galleryTouchStartY = 0;
       galleryMain.addEventListener('touchstart', (event) => {
