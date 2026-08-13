@@ -275,12 +275,14 @@
       .account-group + .account-group { padding-left: 12px; border-left: 1px solid var(--line); }
       .account-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px; min-height: 68px; border-bottom: 1px solid var(--line); }
       .account-row:last-child { border-bottom: 0; }
-      .account-detail { display: grid; gap: 10px; min-width: 0; }
+      .account-detail { display: grid; gap: 6px; min-width: 0; }
       .account-role { color: #766d68; font-size: 14px; }
       .account-number { display: flex; align-items: center; gap: 4px; color: var(--ink); font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 12px; letter-spacing: .02em; white-space: nowrap; }
       .account-bank, .account-number-value { white-space: nowrap; }
+      .account-holder { color: var(--ink); font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 12px; letter-spacing: .02em; }
       @media (max-width: 480px) {
         .account-number { display: grid; gap: 2px; font-size: 11px; white-space: normal; }
+        .account-holder { font-size: 11px; }
       }
       .copy-account { position: relative; display: grid; width: 32px; height: 32px; place-items: center; border: 0; border-radius: 50%; color: var(--ink); background: #f3f1ef; font-size: 17px; cursor: pointer; transition: color .22s ease, background .22s ease, transform .22s ease; }
       .copy-account::after { position: absolute; color: #fff; content: "✓"; font-family: sans-serif; font-size: 16px; font-weight: 700; opacity: 0; transform: scale(.45) rotate(-18deg); transition: opacity .2s ease, transform .28s cubic-bezier(.2, .8, .2, 1); }
@@ -327,6 +329,12 @@
       .gallery-turn-canvas { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; opacity: 0; pointer-events: none; will-change: contents; }
       .gallery-main.is-turning .gallery-turn-canvas { opacity: 1; }
       .gallery-main.is-turning { cursor: grabbing; }
+      html.gallery-lightbox-open, html.gallery-lightbox-open body { overflow: hidden; }
+      .gallery-lightbox { position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; background: rgb(18 16 15 / 94%); opacity: 0; visibility: hidden; transition: opacity .22s ease, visibility .22s ease; }
+      .gallery-lightbox.is-open { opacity: 1; visibility: visible; }
+      .gallery-lightbox-stage { display: grid; width: 100%; height: 100%; overflow: hidden; place-items: center; touch-action: none; user-select: none; -webkit-user-select: none; }
+      .gallery-lightbox-image { display: block; max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: auto; transform: translate3d(0, 0, 0) scale(1); transform-origin: center; will-change: transform; user-select: none; -webkit-user-drag: none; }
+      .gallery-lightbox-close { position: absolute; top: max(16px, env(safe-area-inset-top)); right: 16px; z-index: 2; display: grid; width: 42px; height: 42px; padding: 0; place-items: center; border: 0; border-radius: 50%; color: #fff; background: rgb(0 0 0 / 38%); font: 32px/1 sans-serif; cursor: pointer; }
       .gallery-counter { margin: 10px 0 16px; color: #a39b95; font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 11px; text-align: right; }
       .gallery-thumbnails { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; padding-bottom: 8px; scroll-snap-type: x proximity; scrollbar-width: none; touch-action: pan-x; cursor: grab; -webkit-overflow-scrolling: touch; }
       .gallery-thumbnails.is-dragging { cursor: grabbing; user-select: none; }
@@ -477,7 +485,7 @@
         <div class="third-photo-row">
           <div class="third-message">
             <p>신랑은<br>곁에 있으면 가장 나답고<br>편안해지는 사람입니다.</p>
-            <p>사소한 순간에도<br>늘 저의 마음을 먼저 헤아려주고,<br>필요한 순간에는 망설임 없이<br>손을 내밀어주는<br>따뜻한 마음을 지녔습니다.</p>
+            <p>사소한 순간에도<br>늘 제 마음을 먼저 헤아려주고,<br>필요한 순간에는 망설임 없이<br>손을 내밀어주는<br>따뜻한 마음을 지녔습니다.</p>
             <p>한결같이 곁을 지켜주는<br>든든하고 믿음직한 사람입니다.</p>
             <p>-지현</p>
           </div>
@@ -505,13 +513,13 @@
         <div class="family-info">
           <p><strong>박찬호 · 신은정</strong> <span class="relationship">의 차남</span> <strong>건우</strong></p>
           <p><strong>김영희 · 김지영</strong> <span class="relationship">의 차녀</span> <strong>지현</strong></p>
-          <button class="contact-link" id="open-contact" type="button">연락하기</button>
           <p class="ceremony-summary">2026년 10월 10일 토요일 오전 11시<br>더 레이나 웨딩홀</p>
+          <button class="contact-link" id="open-contact" type="button">연락하기</button>
         </div>
       </section>
 
       <section class="gallery-section" aria-label="사진 갤러리">
-        <div class="gallery-main" id="gallery-main">
+        <div class="gallery-main" id="gallery-main" role="button" tabindex="0" aria-label="현재 사진 확대 보기">
           <img id="gallery-main-image" src="assets/gallery/gallery-01.jpg" alt="결혼 사진 1" draggable="false" loading="lazy" decoding="async">
           <canvas class="gallery-turn-canvas" id="gallery-turn-canvas" aria-hidden="true"></canvas>
         </div>
@@ -522,6 +530,12 @@
           <button class="gallery-thumbnail-arrow gallery-thumbnail-next" id="gallery-thumbnail-next" type="button" aria-label="다음 사진 목록 보기">›</button>
         </div>
       </section>
+      <div class="gallery-lightbox" id="gallery-lightbox" aria-hidden="true">
+        <div class="gallery-lightbox-stage" id="gallery-lightbox-stage">
+          <img class="gallery-lightbox-image" id="gallery-lightbox-image" alt="확대된 결혼 사진" draggable="false">
+        </div>
+        <button class="gallery-lightbox-close" type="button" aria-label="확대 사진 닫기">×</button>
+      </div>
       <section id="location">
         <div class="venue-info">
           <h2>오시는 길</h2>
@@ -578,14 +592,14 @@
           <p class="account-note">멀리서 축하의 마음을 전해 주시는 분들을 위해<br>조심스러운 마음으로 안내드립니다.<br>보내주시는 따뜻한 마음에 깊이 감사드립니다.</p>
           <div class="account-list">
             <div class="account-group">
-              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 · 박건우</span><span class="account-number"><span class="account-bank">우리은행</span><span class="account-number-value">1002-956-692206</span></span></div><button class="copy-account" type="button" data-account="1002956692206" aria-label="신랑 박건우 계좌번호 복사">⧉</button></div>
-              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 아버지 · 박찬호</span><span class="account-number"><span class="account-bank">농협</span><span class="account-number-value">352-1455-7577-93</span></span></div><button class="copy-account" type="button" data-account="3521455757793" aria-label="신랑 아버지 박찬호 계좌번호 복사">⧉</button></div>
-              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 어머니 · 신은정</span><span class="account-number"><span class="account-bank">농협</span><span class="account-number-value">201018-56-055363</span></span></div><button class="copy-account" type="button" data-account="20101856055363" aria-label="신랑 어머니 신은정 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신랑</span><span class="account-number"><span class="account-bank">우리은행</span><span class="account-number-value">1002-956-692206</span></span><span class="account-holder">박건우</span></div><button class="copy-account" type="button" data-account="1002956692206" aria-label="신랑 박건우 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 아버지</span><span class="account-number"><span class="account-bank">농협</span><span class="account-number-value">352-1455-7577-93</span></span><span class="account-holder">박찬호</span></div><button class="copy-account" type="button" data-account="3521455757793" aria-label="신랑 아버지 박찬호 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 어머니</span><span class="account-number"><span class="account-bank">농협</span><span class="account-number-value">201018-56-055363</span></span><span class="account-holder">신은정</span></div><button class="copy-account" type="button" data-account="20101856055363" aria-label="신랑 어머니 신은정 계좌번호 복사">⧉</button></div>
             </div>
             <div class="account-group">
-              <div class="account-row"><div class="account-detail"><span class="account-role">신부 · 김지현</span><span class="account-number"><span class="account-bank">토스뱅크</span><span class="account-number-value">1001-5194-2941</span></span></div><button class="copy-account" type="button" data-account="100151942941" aria-label="신부 김지현 계좌번호 복사">⧉</button></div>
-              <div class="account-row"><div class="account-detail"><span class="account-role">신부 아버지 · 김영희</span><span class="account-number"><span class="account-bank">카카오뱅크</span><span class="account-number-value">3333-21-8960261</span></span></div><button class="copy-account" type="button" data-account="3333218960261" aria-label="신부 아버지 김영희 계좌번호 복사">⧉</button></div>
-              <div class="account-row"><div class="account-detail"><span class="account-role">신부 어머니 · 김지영</span><span class="account-number"><span class="account-bank">농협</span><span class="account-number-value">201151-52-236750</span></span></div><button class="copy-account" type="button" data-account="20115152236750" aria-label="신부 어머니 김지영 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신부</span><span class="account-number"><span class="account-bank">토스뱅크</span><span class="account-number-value">1001-5194-2941</span></span><span class="account-holder">김지현</span></div><button class="copy-account" type="button" data-account="100151942941" aria-label="신부 김지현 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신부 아버지</span><span class="account-number"><span class="account-bank">카카오뱅크</span><span class="account-number-value">3333-21-8960261</span></span><span class="account-holder">김영희</span></div><button class="copy-account" type="button" data-account="3333218960261" aria-label="신부 아버지 김영희 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신부 어머니</span><span class="account-number"><span class="account-bank">농협</span><span class="account-number-value">201151-52-236750</span></span><span class="account-holder">김지영</span></div><button class="copy-account" type="button" data-account="20115152236750" aria-label="신부 어머니 김지영 계좌번호 복사">⧉</button></div>
             </div>
           </div>
         </div>
@@ -607,6 +621,10 @@
       const galleryMainImage = document.querySelector('#gallery-main-image');
       const galleryTurnCanvas = document.querySelector('#gallery-turn-canvas');
       const galleryTurnContext = galleryTurnCanvas.getContext('2d');
+      const galleryLightbox = document.querySelector('#gallery-lightbox');
+      const galleryLightboxStage = document.querySelector('#gallery-lightbox-stage');
+      const galleryLightboxImage = document.querySelector('#gallery-lightbox-image');
+      const galleryLightboxClose = document.querySelector('.gallery-lightbox-close');
       const galleryCurrent = document.querySelector('#gallery-current');
       const galleryTotal = document.querySelector('#gallery-total');
       const galleryThumbnails = document.querySelector('#gallery-thumbnails');
@@ -723,7 +741,7 @@
       closeAccount.addEventListener('click', () => toggleAccount(false));
       accountModal.addEventListener('click', (event) => { if (event.target === accountModal) toggleAccount(false); });
       document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') { toggleContact(false); toggleAccount(false); }
+        if (event.key === 'Escape') { toggleContact(false); toggleAccount(false); closeGalleryLightbox(); }
       });
       document.querySelectorAll('.copy-account').forEach((button) => button.addEventListener('click', async () => {
         const accountNumber = button.dataset.account;
@@ -1088,6 +1106,128 @@
       let gallerySwipeStartedAt = 0;
       let gallerySwipePointerId = null;
       let gallerySwipeAxis = '';
+      const galleryZoomPointers = new Map();
+      let galleryZoomScale = 1;
+      let galleryZoomX = 0;
+      let galleryZoomY = 0;
+      let galleryZoomStartX = 0;
+      let galleryZoomStartY = 0;
+      let galleryZoomStartTranslateX = 0;
+      let galleryZoomStartTranslateY = 0;
+      let galleryZoomStartDistance = 0;
+      let galleryZoomStartScale = 1;
+
+      function applyGalleryZoom() {
+        galleryLightboxImage.style.transform = `translate3d(${galleryZoomX}px, ${galleryZoomY}px, 0) scale(${galleryZoomScale})`;
+      }
+
+      function clampGalleryZoomTranslation() {
+        const maxX = Math.max(0, (galleryLightboxImage.offsetWidth * galleryZoomScale - galleryLightboxStage.clientWidth) / 2);
+        const maxY = Math.max(0, (galleryLightboxImage.offsetHeight * galleryZoomScale - galleryLightboxStage.clientHeight) / 2);
+        galleryZoomX = Math.max(-maxX, Math.min(maxX, galleryZoomX));
+        galleryZoomY = Math.max(-maxY, Math.min(maxY, galleryZoomY));
+      }
+
+      function resetGalleryZoom() {
+        galleryZoomPointers.clear();
+        galleryZoomScale = 1;
+        galleryZoomX = 0;
+        galleryZoomY = 0;
+        applyGalleryZoom();
+      }
+
+      function openGalleryLightbox() {
+        galleryLightboxImage.src = galleryMainImage.currentSrc || galleryMainImage.src;
+        galleryLightboxImage.alt = galleryMainImage.alt;
+        resetGalleryZoom();
+        galleryLightbox.classList.add('is-open');
+        galleryLightbox.setAttribute('aria-hidden', 'false');
+        document.documentElement.classList.add('gallery-lightbox-open');
+        galleryLightboxClose.focus({ preventScroll: true });
+      }
+
+      function closeGalleryLightbox() {
+        if (!galleryLightbox.classList.contains('is-open')) return;
+        galleryLightbox.classList.remove('is-open');
+        galleryLightbox.setAttribute('aria-hidden', 'true');
+        document.documentElement.classList.remove('gallery-lightbox-open');
+        resetGalleryZoom();
+        galleryMain.focus({ preventScroll: true });
+      }
+
+      function getGalleryZoomDistance() {
+        const points = Array.from(galleryZoomPointers.values());
+        if (points.length < 2) return 0;
+        return Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y);
+      }
+
+      function rebaseGalleryZoomGesture() {
+        const point = galleryZoomPointers.values().next().value;
+        if (point) {
+          galleryZoomStartX = point.x;
+          galleryZoomStartY = point.y;
+          galleryZoomStartTranslateX = galleryZoomX;
+          galleryZoomStartTranslateY = galleryZoomY;
+        }
+        if (galleryZoomPointers.size >= 2) {
+          galleryZoomStartDistance = getGalleryZoomDistance();
+          galleryZoomStartScale = galleryZoomScale;
+        }
+      }
+
+      galleryLightboxClose.addEventListener('click', closeGalleryLightbox);
+      galleryLightboxStage.addEventListener('click', (event) => {
+        if (event.target === galleryLightboxStage) closeGalleryLightbox();
+      });
+      galleryLightboxStage.addEventListener('pointerdown', (event) => {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        galleryLightboxStage.setPointerCapture(event.pointerId);
+        galleryZoomPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        rebaseGalleryZoomGesture();
+      });
+      galleryLightboxStage.addEventListener('pointermove', (event) => {
+        if (!galleryZoomPointers.has(event.pointerId)) return;
+        galleryZoomPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        if (galleryZoomPointers.size >= 2) {
+          if (event.cancelable) event.preventDefault();
+          const distance = getGalleryZoomDistance();
+          if (galleryZoomStartDistance) {
+            galleryZoomScale = Math.max(1, Math.min(4, galleryZoomStartScale * distance / galleryZoomStartDistance));
+            if (galleryZoomScale === 1) galleryZoomX = galleryZoomY = 0;
+            clampGalleryZoomTranslation();
+            applyGalleryZoom();
+          }
+          return;
+        }
+        if (galleryZoomScale <= 1) return;
+        if (event.cancelable) event.preventDefault();
+        galleryZoomX = galleryZoomStartTranslateX + event.clientX - galleryZoomStartX;
+        galleryZoomY = galleryZoomStartTranslateY + event.clientY - galleryZoomStartY;
+        clampGalleryZoomTranslation();
+        applyGalleryZoom();
+      }, { passive: false });
+      function releaseGalleryZoomPointer(event) {
+        if (!galleryZoomPointers.has(event.pointerId)) return;
+        if (galleryLightboxStage.hasPointerCapture(event.pointerId)) galleryLightboxStage.releasePointerCapture(event.pointerId);
+        galleryZoomPointers.delete(event.pointerId);
+        rebaseGalleryZoomGesture();
+      }
+      galleryLightboxStage.addEventListener('pointerup', releaseGalleryZoomPointer);
+      galleryLightboxStage.addEventListener('pointercancel', releaseGalleryZoomPointer);
+      galleryLightboxStage.addEventListener('wheel', (event) => {
+        event.preventDefault();
+        galleryZoomScale = Math.max(1, Math.min(4, galleryZoomScale * (event.deltaY < 0 ? 1.15 : .87)));
+        if (galleryZoomScale === 1) galleryZoomX = galleryZoomY = 0;
+        clampGalleryZoomTranslation();
+        applyGalleryZoom();
+      }, { passive: false });
+      galleryLightboxImage.addEventListener('dblclick', () => {
+        galleryZoomScale = galleryZoomScale > 1 ? 1 : 2.5;
+        galleryZoomX = 0;
+        galleryZoomY = 0;
+        clampGalleryZoomTranslation();
+        applyGalleryZoom();
+      });
 
       function snapGallerySectionIntoPlace() {
         const galleryTop = gallerySection.getBoundingClientRect().top;
@@ -1141,6 +1281,10 @@
         galleryMain.classList.remove('is-dragging');
         gallerySwipePointerId = null;
         gallerySwipeAxis = '';
+        if (!completedAxis && galleryTurnState === 'idle') {
+          openGalleryLightbox();
+          return;
+        }
         if (completedAxis !== 'horizontal' || galleryTurnState !== 'dragging') return;
         const isQuickFlick = Math.abs(swipeDistance) > 32 && swipeDuration < 350;
         if (galleryTurnProgress >= .16 || isQuickFlick) completeGalleryTurn();
@@ -1152,6 +1296,12 @@
         gallerySwipePointerId = null;
         gallerySwipeAxis = '';
         if (galleryTurnState === 'dragging') cancelGalleryTurn();
+      });
+      galleryMain.addEventListener('keydown', (event) => {
+        if ((event.key === 'Enter' || event.key === ' ') && galleryTurnState === 'idle') {
+          event.preventDefault();
+          openGalleryLightbox();
+        }
       });
 
       let galleryTouchStartX = 0;
