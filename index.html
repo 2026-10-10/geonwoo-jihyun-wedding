@@ -250,12 +250,12 @@
       .contact-group + .contact-group { border-left: 0; }
       .contact-row { display: grid; grid-template-columns: minmax(0, 1fr) max-content; gap: 8px; align-items: center; min-height: 58px; }
       .contact-row:not(:first-child) { grid-template-columns: max-content max-content; justify-content: center; gap: 14px; }
-      .contact-role { color: #766d68; font-size: 16px; text-align: left; white-space: nowrap; }
+      .contact-role { color: #766d68; font-size: 16px; font-weight: 400; text-align: left; white-space: nowrap; }
       .contact-row:first-child { position: relative; }
       .contact-role--primary { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
       .contact-actions { display: flex; grid-column: 2; gap: 4px; }
       .contact-actions a { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #f3f1ef; color: var(--ink); font-size: 16px; text-decoration: none; }
-      .contact-actions a:last-child { font-size: 21px; }
+      .sms-icon { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
       @media (max-width: 420px) {
         .contact-panel { padding-right: 12px; padding-left: 12px; }
         .contact-group { padding-right: 8px; padding-left: 8px; }
@@ -277,7 +277,11 @@
       .account-row:last-child { border-bottom: 0; }
       .account-detail { display: grid; gap: 10px; min-width: 0; }
       .account-role { color: #766d68; font-size: 14px; }
-      .account-number { color: var(--ink); font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 12px; letter-spacing: .02em; white-space: nowrap; }
+      .account-number { display: flex; align-items: center; gap: 4px; color: var(--ink); font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 12px; letter-spacing: .02em; white-space: nowrap; }
+      .account-bank, .account-number-value { white-space: nowrap; }
+      @media (max-width: 480px) {
+        .account-number { display: grid; gap: 2px; font-size: 11px; white-space: normal; }
+      }
       .copy-account { position: relative; display: grid; width: 32px; height: 32px; place-items: center; border: 0; border-radius: 50%; color: var(--ink); background: #f3f1ef; font-size: 17px; cursor: pointer; transition: color .22s ease, background .22s ease, transform .22s ease; }
       .copy-account::after { position: absolute; color: #fff; content: "✓"; font-family: sans-serif; font-size: 16px; font-weight: 700; opacity: 0; transform: scale(.45) rotate(-18deg); transition: opacity .2s ease, transform .28s cubic-bezier(.2, .8, .2, 1); }
       .copy-account.copied { color: transparent; background: #5d4537; transform: scale(1.08); }
@@ -555,13 +559,13 @@
           <h2>연락하기</h2>
           <div class="contact-list">
             <div class="contact-group">
-              <div class="contact-row"><span class="contact-role contact-role--primary">신랑</span></div>
-              <div class="contact-row"><span class="contact-role">신랑 아버지</span><div class="contact-actions"><a href="tel:01056355949" aria-label="신랑 아버지에게 전화">☎</a><a href="sms:01056355949" aria-label="신랑 아버지에게 문자">✉</a></div></div>
-              <div class="contact-row"><span class="contact-role">신랑 어머니</span><div class="contact-actions"><a href="tel:01043795949" aria-label="신랑 어머니에게 전화">☎</a><a href="sms:01043795949" aria-label="신랑 어머니에게 문자">✉</a></div></div>
+              <div class="contact-row"><span class="contact-role contact-role--primary">신랑측</span></div>
+              <div class="contact-row"><span class="contact-role">신랑 아버지</span><div class="contact-actions"><a href="tel:01056355949" aria-label="신랑 아버지에게 전화">☎</a><a href="sms:01056355949" aria-label="신랑 아버지에게 문자"><svg class="sms-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H9l-4.5 3v-13.5Z"/></svg></a></div></div>
+              <div class="contact-row"><span class="contact-role">신랑 어머니</span><div class="contact-actions"><a href="tel:01043795949" aria-label="신랑 어머니에게 전화">☎</a><a href="sms:01043795949" aria-label="신랑 어머니에게 문자"><svg class="sms-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H9l-4.5 3v-13.5Z"/></svg></a></div></div>
             </div>
             <div class="contact-group">
-              <div class="contact-row"><span class="contact-role contact-role--primary">신부</span></div>
-              <div class="contact-row"><span class="contact-role">신부 부모님</span><div class="contact-actions"><a href="tel:01053545885" aria-label="신부 부모님에게 전화">☎</a><a href="sms:01053545885" aria-label="신부 부모님에게 문자">✉</a></div></div>
+              <div class="contact-row"><span class="contact-role contact-role--primary">신부측</span></div>
+              <div class="contact-row"><span class="contact-role">신부 부모님</span><div class="contact-actions"><a href="tel:01053545885" aria-label="신부 부모님에게 전화">☎</a><a href="sms:01053545885" aria-label="신부 부모님에게 문자"><svg class="sms-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H9l-4.5 3v-13.5Z"/></svg></a></div></div>
             </div>
           </div>
           <a class="account-button contact-account-link" href="#account" data-close-contact data-open-account>마음 전하실 곳</a>
@@ -574,14 +578,14 @@
           <p class="account-note">멀리서 축하의 마음을 전해 주시는 분들을 위해<br>조심스러운 마음으로 안내드립니다.<br>보내주시는 따뜻한 마음에 깊이 감사드립니다.</p>
           <div class="account-list">
             <div class="account-group">
-              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 · 박건우</span><span class="account-number">우리은행 1002-956-692206</span></div><button class="copy-account" type="button" data-account="1002956692206" aria-label="신랑 박건우 계좌번호 복사">⧉</button></div>
-              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 아버지 · 박찬호</span><span class="account-number">농협 352-1455-7577-93</span></div><button class="copy-account" type="button" data-account="3521455757793" aria-label="신랑 아버지 박찬호 계좌번호 복사">⧉</button></div>
-              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 어머니 · 신은정</span><span class="account-number">농협 201018-56-055363</span></div><button class="copy-account" type="button" data-account="20101856055363" aria-label="신랑 어머니 신은정 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 · 박건우</span><span class="account-number"><span class="account-bank">우리은행</span><span class="account-number-value">1002-956-692206</span></span></div><button class="copy-account" type="button" data-account="1002956692206" aria-label="신랑 박건우 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 아버지 · 박찬호</span><span class="account-number"><span class="account-bank">농협</span><span class="account-number-value">352-1455-7577-93</span></span></div><button class="copy-account" type="button" data-account="3521455757793" aria-label="신랑 아버지 박찬호 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신랑 어머니 · 신은정</span><span class="account-number"><span class="account-bank">농협</span><span class="account-number-value">201018-56-055363</span></span></div><button class="copy-account" type="button" data-account="20101856055363" aria-label="신랑 어머니 신은정 계좌번호 복사">⧉</button></div>
             </div>
             <div class="account-group">
-              <div class="account-row"><div class="account-detail"><span class="account-role">신부 · 김지현</span><span class="account-number">토스뱅크 1001-5194-2941</span></div><button class="copy-account" type="button" data-account="100151942941" aria-label="신부 김지현 계좌번호 복사">⧉</button></div>
-              <div class="account-row"><div class="account-detail"><span class="account-role">신부 아버지 · 김영희</span><span class="account-number">카카오뱅크 3333-21-8960261</span></div><button class="copy-account" type="button" data-account="3333218960261" aria-label="신부 아버지 김영희 계좌번호 복사">⧉</button></div>
-              <div class="account-row"><div class="account-detail"><span class="account-role">신부 어머니 · 김지영</span><span class="account-number">농협 201151-52-236750</span></div><button class="copy-account" type="button" data-account="20115152236750" aria-label="신부 어머니 김지영 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신부 · 김지현</span><span class="account-number"><span class="account-bank">토스뱅크</span><span class="account-number-value">1001-5194-2941</span></span></div><button class="copy-account" type="button" data-account="100151942941" aria-label="신부 김지현 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신부 아버지 · 김영희</span><span class="account-number"><span class="account-bank">카카오뱅크</span><span class="account-number-value">3333-21-8960261</span></span></div><button class="copy-account" type="button" data-account="3333218960261" aria-label="신부 아버지 김영희 계좌번호 복사">⧉</button></div>
+              <div class="account-row"><div class="account-detail"><span class="account-role">신부 어머니 · 김지영</span><span class="account-number"><span class="account-bank">농협</span><span class="account-number-value">201151-52-236750</span></span></div><button class="copy-account" type="button" data-account="20115152236750" aria-label="신부 어머니 김지영 계좌번호 복사">⧉</button></div>
             </div>
           </div>
         </div>
