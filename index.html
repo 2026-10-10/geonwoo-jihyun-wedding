@@ -630,6 +630,7 @@
       let musicUserPaused = false;
       let heroTouchStartX = 0;
       let heroTouchStartY = 0;
+      let snapGestureStartedInGallery = false;
       function revealHeroFrame(frame, delay) {
         const reveal = () => window.setTimeout(() => frame.classList.add('is-visible'), delay);
         if (frame.dataset.src) {
@@ -667,6 +668,7 @@
       document.addEventListener('wheel', (event) => {
         openInvitation(false);
         void startMusicFromGesture();
+        if (event.target.closest('.gallery-section')) return;
         if (event.deltaY > 0 && moveToNearbySnapTarget() && event.cancelable) event.preventDefault();
       }, { passive: false });
       document.addEventListener('touchstart', (event) => {
@@ -674,11 +676,13 @@
         void startMusicFromGesture();
         heroTouchStartX = event.touches[0].clientX;
         heroTouchStartY = event.touches[0].clientY;
+        snapGestureStartedInGallery = Boolean(event.target.closest('.gallery-section'));
       }, { passive: true });
       document.addEventListener('touchend', (event) => {
         const distanceX = event.changedTouches[0].clientX - heroTouchStartX;
         const distanceY = heroTouchStartY - event.changedTouches[0].clientY;
-        if (distanceY > 12 && distanceY > Math.abs(distanceX) * 1.05) moveToNearbySnapTarget();
+        if (!snapGestureStartedInGallery && distanceY > 12 && distanceY > Math.abs(distanceX) * 1.05) moveToNearbySnapTarget();
+        snapGestureStartedInGallery = false;
       }, { passive: true });
 
       function updateCountdown() {
@@ -1105,7 +1109,6 @@
 
       galleryMain.addEventListener('pointerdown', (event) => {
         if (galleryTurnState !== 'idle' || (event.pointerType === 'mouse' && event.button !== 0)) return;
-        snapGallerySectionIntoPlace();
         gallerySwipeStartX = event.clientX;
         gallerySwipeStartY = event.clientY;
         gallerySwipeStartedAt = performance.now();
@@ -1121,6 +1124,7 @@
         if (!gallerySwipeAxis) {
           if (Math.max(Math.abs(swipeDistance), Math.abs(verticalDistance)) < 6) return;
           gallerySwipeAxis = Math.abs(swipeDistance) > Math.abs(verticalDistance) * 1.05 ? 'horizontal' : 'vertical';
+          if (gallerySwipeAxis === 'horizontal') snapGallerySectionIntoPlace();
         }
         if (gallerySwipeAxis !== 'horizontal') return;
         if (event.cancelable) event.preventDefault();
