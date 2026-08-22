@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="건우와 지현의 결혼식에 초대합니다.">
     <title>Geonwoo &amp; Jihyun Wedding</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jeju+Myeongjo&amp;display=swap" rel="stylesheet">
     <style>
+      @font-face {
+        font-family: "Jeju Myeongjo";
+        src: url("assets/fonts/JejuMyeongjo-subset.woff2") format("woff2");
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+      }
+
       :root {
         --ink: #2f2926;
         --paper: #fcfcfc;
@@ -212,6 +217,7 @@
       .contact-actions { display: flex; grid-column: 2; gap: 4px; }
       .contact-actions a { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #f3f1ef; color: var(--ink); font-size: 16px; text-decoration: none; }
       .contact-actions a:last-child { font-size: 21px; }
+      .sms-icon { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
       .account-button { display: inline-flex; align-items: center; justify-content: center; min-width: 180px; min-height: 52px; border: 1px solid var(--ink); border-radius: 999px; color: var(--ink); background: transparent; font: inherit; font-size: 16px; text-decoration: none; cursor: pointer; }
       .account-button:hover, .account-button:focus-visible { color: var(--paper); background: var(--ink); }
       .account-note { margin: 0 0 24px; color: #766d68; font-size: 14px; line-height: 1.85; }
@@ -322,7 +328,7 @@
       .loading-screen.is-hidden { opacity: 0; visibility: hidden; }
       .loading-message {
         margin: 0;
-        font-family: Georgia, "Times New Roman", serif;
+        font-family: "Jeju Myeongjo", "Apple Myungjo", serif;
         font-size: clamp(25px, 7vw, 36px);
         font-weight: 400;
         line-height: 1.55;
@@ -446,14 +452,14 @@
           <p class="contact-notice">안심번호로 연결됩니다.</p>
           <div class="contact-list">
             <div class="contact-group">
-              <div class="contact-row"><span class="contact-role contact-role--primary">신랑</span><div class="contact-actions"><a href="#" aria-label="신랑에게 전화" data-contact="신랑 전화">☎</a><a href="#" aria-label="신랑에게 문자" data-contact="신랑 문자">✉</a></div></div>
-              <div class="contact-row"><span class="contact-role">신랑 아버지</span><div class="contact-actions"><a href="#" aria-label="신랑 아버지에게 전화" data-contact="신랑 아버지 전화">☎</a><a href="#" aria-label="신랑 아버지에게 문자" data-contact="신랑 아버지 문자">✉</a></div></div>
-              <div class="contact-row"><span class="contact-role">신랑 어머니</span><div class="contact-actions"><a href="#" aria-label="신랑 어머니에게 전화" data-contact="신랑 어머니 전화">☎</a><a href="#" aria-label="신랑 어머니에게 문자" data-contact="신랑 어머니 문자">✉</a></div></div>
+              <div class="contact-row"><span class="contact-role contact-role--primary">신랑</span><div class="contact-actions"><a href="#" aria-label="신랑에게 전화" data-contact="신랑 전화">☎</a><a href="#" aria-label="신랑에게 문자" data-contact="신랑 문자"><svg class="sms-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H9l-4.5 3v-13.5Z"/></svg></a></div></div>
+              <div class="contact-row"><span class="contact-role">신랑 아버지</span><div class="contact-actions"><a href="#" aria-label="신랑 아버지에게 전화" data-contact="신랑 아버지 전화">☎</a><a href="#" aria-label="신랑 아버지에게 문자" data-contact="신랑 아버지 문자"><svg class="sms-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H9l-4.5 3v-13.5Z"/></svg></a></div></div>
+              <div class="contact-row"><span class="contact-role">신랑 어머니</span><div class="contact-actions"><a href="#" aria-label="신랑 어머니에게 전화" data-contact="신랑 어머니 전화">☎</a><a href="#" aria-label="신랑 어머니에게 문자" data-contact="신랑 어머니 문자"><svg class="sms-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H9l-4.5 3v-13.5Z"/></svg></a></div></div>
             </div>
             <div class="contact-group">
-              <div class="contact-row"><span class="contact-role contact-role--primary">신부</span><div class="contact-actions"><a href="#" aria-label="신부에게 전화" data-contact="신부 전화">☎</a><a href="#" aria-label="신부에게 문자" data-contact="신부 문자">✉</a></div></div>
-              <div class="contact-row"><span class="contact-role">신부 아버지</span><div class="contact-actions"><a href="#" aria-label="신부 아버지에게 전화" data-contact="신부 아버지 전화">☎</a><a href="#" aria-label="신부 아버지에게 문자" data-contact="신부 아버지 문자">✉</a></div></div>
-              <div class="contact-row"><span class="contact-role">신부 어머니</span><div class="contact-actions"><a href="#" aria-label="신부 어머니에게 전화" data-contact="신부 어머니 전화">☎</a><a href="#" aria-label="신부 어머니에게 문자" data-contact="신부 어머니 문자">✉</a></div></div>
+              <div class="contact-row"><span class="contact-role contact-role--primary">신부</span><div class="contact-actions"><a href="#" aria-label="신부에게 전화" data-contact="신부 전화">☎</a><a href="#" aria-label="신부에게 문자" data-contact="신부 문자"><svg class="sms-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H9l-4.5 3v-13.5Z"/></svg></a></div></div>
+              <div class="contact-row"><span class="contact-role">신부 아버지</span><div class="contact-actions"><a href="#" aria-label="신부 아버지에게 전화" data-contact="신부 아버지 전화">☎</a><a href="#" aria-label="신부 아버지에게 문자" data-contact="신부 아버지 문자"><svg class="sms-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H9l-4.5 3v-13.5Z"/></svg></a></div></div>
+              <div class="contact-row"><span class="contact-role">신부 어머니</span><div class="contact-actions"><a href="#" aria-label="신부 어머니에게 전화" data-contact="신부 어머니 전화">☎</a><a href="#" aria-label="신부 어머니에게 문자" data-contact="신부 어머니 문자"><svg class="sms-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.5H9l-4.5 3v-13.5Z"/></svg></a></div></div>
             </div>
           </div>
           <a class="account-button contact-account-link" href="#account" data-close-contact data-open-account>마음 전하실 곳</a>
