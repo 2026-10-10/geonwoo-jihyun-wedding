@@ -516,10 +516,10 @@
 
       <section class="gallery-section" aria-label="사진 갤러리">
         <div class="gallery-main" id="gallery-main" aria-label="현재 결혼 사진">
-          <img id="gallery-main-image" src="assets/gallery/gallery-01.jpg?v=20260823-2" alt="결혼 사진 1" draggable="false" loading="lazy" decoding="async">
+          <img id="gallery-main-image" src="assets/gallery/gallery-01.jpg?v=20260823-3" alt="결혼 사진 1" draggable="false" loading="lazy" decoding="async">
           <canvas class="gallery-turn-canvas" id="gallery-turn-canvas" aria-hidden="true"></canvas>
         </div>
-        <p class="gallery-counter"><span id="gallery-current">1</span>/<span id="gallery-total">15</span></p>
+        <p class="gallery-counter"><span id="gallery-current">1</span>/<span id="gallery-total">16</span></p>
         <div class="gallery-thumbnails-wrap">
           <button class="gallery-thumbnail-arrow gallery-thumbnail-prev" id="gallery-thumbnail-prev" type="button" aria-label="이전 사진 목록 보기" hidden>‹</button>
           <div class="gallery-thumbnails" id="gallery-thumbnails" aria-label="사진 선택"></div>
@@ -754,8 +754,8 @@
         window.alert('연락처를 등록하면 연결됩니다.');
       }));
 
-      const galleryImageCount = 15;
-      const galleryAssetVersion = '20260823-2';
+      const galleryImageCount = 16;
+      const galleryAssetVersion = '20260823-3';
       galleryTotal.textContent = galleryImageCount;
       let selectedGalleryIndex = 1;
       const availableGalleryIndexes = Array.from({ length: galleryImageCount }, (_, index) => index + 1);
