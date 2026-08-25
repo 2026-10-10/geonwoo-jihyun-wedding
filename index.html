@@ -327,8 +327,9 @@
       .gallery-main { position: relative; width: calc(100% + 56px); margin-left: -28px; aspect-ratio: 2 / 3; overflow: hidden; isolation: isolate; background: #e7dfd8; touch-action: pan-y; overscroll-behavior: contain; cursor: grab; user-select: none; -webkit-user-select: none; }
       .gallery-main.is-dragging { cursor: grabbing; }
       .gallery-main img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; user-select: none; -webkit-user-drag: none; }
-      #gallery-main-image { z-index: 1; transition: opacity .2s ease, transform .24s ease; }
-      #gallery-main-image.is-changing { opacity: 0; transform: scale(.992); }
+      #gallery-main-image { z-index: 1; }
+      #gallery-crossfade-image { z-index: 3; opacity: 0; transition: opacity .26s ease; will-change: opacity; }
+      #gallery-crossfade-image.is-visible { opacity: 1; }
       .gallery-turn-canvas { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; opacity: 0; pointer-events: none; will-change: contents; }
       .gallery-main.is-turning .gallery-turn-canvas { opacity: 1; }
       .gallery-main.is-turning { cursor: grabbing; }
@@ -339,7 +340,7 @@
       .gallery-main-arrow:active { transform: scale(.92); }
       .gallery-main-arrow--prev { grid-column: 1; justify-self: start; }
       .gallery-main-arrow--next { grid-column: 3; justify-self: end; }
-      .gallery-counter { grid-column: 2; margin: 0; color: #171717; font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 14px; letter-spacing: .04em; text-align: center; }
+      .gallery-counter { grid-column: 2; margin: 0; color: #aaa; font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 13px; letter-spacing: .04em; text-align: center; }
       .gallery-thumbnails { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; padding-bottom: 8px; scroll-snap-type: x proximity; scrollbar-width: none; touch-action: pan-x; cursor: grab; -webkit-overflow-scrolling: touch; }
       .gallery-thumbnails.is-dragging { cursor: grabbing; user-select: none; }
       .gallery-thumbnails::-webkit-scrollbar { display: none; }
@@ -544,6 +545,7 @@
       <section class="gallery-section" aria-label="사진 갤러리">
         <div class="gallery-main" id="gallery-main" aria-label="현재 결혼 사진">
           <img id="gallery-main-image" src="assets/gallery/gallery-01.jpg?v=20260823-3" alt="결혼 사진 1" draggable="false" loading="lazy" decoding="async">
+          <img id="gallery-crossfade-image" alt="" draggable="false" aria-hidden="true">
           <canvas class="gallery-turn-canvas" id="gallery-turn-canvas" aria-hidden="true"></canvas>
         </div>
         <div class="gallery-toolbar">
@@ -621,6 +623,7 @@
       const closeAccount = document.querySelector('.account-close');
       const galleryMain = document.querySelector('#gallery-main');
       const galleryMainImage = document.querySelector('#gallery-main-image');
+      const galleryCrossfadeImage = document.querySelector('#gallery-crossfade-image');
       const galleryTurnCanvas = document.querySelector('#gallery-turn-canvas');
       const galleryTurnContext = galleryTurnCanvas.getContext('2d');
       const galleryMainPrev = document.querySelector('#gallery-main-prev');
@@ -1067,12 +1070,19 @@
         if (gallerySimpleTransitioning) return;
         gallerySimpleTransitioning = true;
         void preloadGalleryImage(index).then(() => {
-          galleryMainImage.classList.add('is-changing');
+          galleryCrossfadeImage.src = getGalleryImagePath(index);
+          galleryCrossfadeImage.alt = `결혼 사진 ${index}`;
+          void galleryCrossfadeImage.offsetWidth;
+          galleryCrossfadeImage.classList.add('is-visible');
           window.setTimeout(() => {
             syncGallerySelection(index);
-            window.requestAnimationFrame(() => galleryMainImage.classList.remove('is-changing'));
-            window.setTimeout(() => { gallerySimpleTransitioning = false; }, 240);
-          }, 180);
+            galleryCrossfadeImage.classList.remove('is-visible');
+            window.setTimeout(() => {
+              galleryCrossfadeImage.removeAttribute('src');
+              galleryCrossfadeImage.alt = '';
+              gallerySimpleTransitioning = false;
+            }, 280);
+          }, 270);
         }).catch(() => { gallerySimpleTransitioning = false; });
       }
 
