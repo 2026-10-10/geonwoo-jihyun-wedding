@@ -331,6 +331,11 @@
       .gallery-turn-canvas { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; opacity: 0; pointer-events: none; will-change: contents; }
       .gallery-main.is-turning .gallery-turn-canvas { opacity: 1; }
       .gallery-main.is-turning { cursor: grabbing; }
+      .gallery-main-arrow { position: absolute; top: 50%; z-index: 3; display: grid; width: 38px; height: 52px; place-items: center; padding: 0; border: 0; border-radius: 999px; color: #fff; background: rgb(35 30 27 / 32%); font: 30px/1 sans-serif; cursor: pointer; touch-action: manipulation; transform: translateY(-50%); transition: background .2s ease, opacity .2s ease; }
+      .gallery-main-arrow:hover, .gallery-main-arrow:focus-visible { background: rgb(35 30 27 / 52%); }
+      .gallery-main.is-turning .gallery-main-arrow { opacity: 0; pointer-events: none; }
+      .gallery-main-arrow--prev { left: 12px; }
+      .gallery-main-arrow--next { right: 12px; }
       .gallery-counter { margin: 10px 0 16px; color: #a39b95; font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; font-size: 11px; text-align: right; }
       .gallery-thumbnails { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; padding-bottom: 8px; scroll-snap-type: x proximity; scrollbar-width: none; touch-action: pan-x; cursor: grab; -webkit-overflow-scrolling: touch; }
       .gallery-thumbnails.is-dragging { cursor: grabbing; user-select: none; }
@@ -537,6 +542,8 @@
         <div class="gallery-main" id="gallery-main" aria-label="현재 결혼 사진">
           <img id="gallery-main-image" src="assets/gallery/gallery-01.jpg?v=20260823-3" alt="결혼 사진 1" draggable="false" loading="lazy" decoding="async">
           <canvas class="gallery-turn-canvas" id="gallery-turn-canvas" aria-hidden="true"></canvas>
+          <button class="gallery-main-arrow gallery-main-arrow--prev" id="gallery-main-prev" type="button" aria-label="이전 사진 보기">‹</button>
+          <button class="gallery-main-arrow gallery-main-arrow--next" id="gallery-main-next" type="button" aria-label="다음 사진 보기">›</button>
         </div>
         <p class="gallery-counter"><span id="gallery-current">1</span>/<span id="gallery-total">16</span></p>
         <div class="gallery-thumbnails-wrap">
@@ -611,6 +618,8 @@
       const galleryMainImage = document.querySelector('#gallery-main-image');
       const galleryTurnCanvas = document.querySelector('#gallery-turn-canvas');
       const galleryTurnContext = galleryTurnCanvas.getContext('2d');
+      const galleryMainPrev = document.querySelector('#gallery-main-prev');
+      const galleryMainNext = document.querySelector('#gallery-main-next');
       const galleryCurrent = document.querySelector('#gallery-current');
       const galleryTotal = document.querySelector('#gallery-total');
       const galleryThumbnails = document.querySelector('#gallery-thumbnails');
@@ -1092,6 +1101,17 @@
         const nextPosition = (safePosition + direction + availableGalleryIndexes.length) % availableGalleryIndexes.length;
         selectGalleryImage(availableGalleryIndexes[nextPosition], direction);
       }
+      [galleryMainPrev, galleryMainNext].forEach((button) => {
+        button.addEventListener('pointerdown', (event) => event.stopPropagation());
+      });
+      galleryMainPrev.addEventListener('click', (event) => {
+        event.stopPropagation();
+        moveGallery(-1);
+      });
+      galleryMainNext.addEventListener('click', (event) => {
+        event.stopPropagation();
+        moveGallery(1);
+      });
       let gallerySwipeStartX = 0;
       let gallerySwipeStartY = 0;
       let gallerySwipeStartedAt = 0;
