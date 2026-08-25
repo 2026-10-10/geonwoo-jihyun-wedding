@@ -1097,17 +1097,6 @@
       let gallerySwipeStartedAt = 0;
       let gallerySwipePointerId = null;
       let gallerySwipeAxis = '';
-      function snapGallerySectionIntoPlace() {
-        const galleryTop = gallerySection.getBoundingClientRect().top;
-        if (Math.abs(galleryTop) <= 2 || Math.abs(galleryTop) >= window.innerHeight) return;
-        const root = document.documentElement;
-        const previousScrollBehavior = root.style.scrollBehavior;
-        root.style.scrollBehavior = 'auto';
-        window.scrollTo({ top: window.scrollY + galleryTop, left: 0, behavior: 'auto' });
-        window.requestAnimationFrame(() => { root.style.scrollBehavior = previousScrollBehavior; });
-        isMovingToSnapTarget = false;
-      }
-
       galleryMain.addEventListener('pointerdown', (event) => {
         if (galleryTurnState !== 'idle' || (event.pointerType === 'mouse' && event.button !== 0)) return;
         gallerySwipeStartX = event.clientX;
@@ -1115,8 +1104,6 @@
         gallerySwipeStartedAt = performance.now();
         gallerySwipePointerId = event.pointerId;
         gallerySwipeAxis = '';
-        galleryMain.classList.add('is-dragging');
-        galleryMain.setPointerCapture(event.pointerId);
       });
       galleryMain.addEventListener('pointermove', (event) => {
         if (event.pointerId !== gallerySwipePointerId) return;
@@ -1124,8 +1111,11 @@
         const verticalDistance = event.clientY - gallerySwipeStartY;
         if (!gallerySwipeAxis) {
           if (Math.max(Math.abs(swipeDistance), Math.abs(verticalDistance)) < 6) return;
-          gallerySwipeAxis = Math.abs(swipeDistance) > Math.abs(verticalDistance) * 1.05 ? 'horizontal' : 'vertical';
-          if (gallerySwipeAxis === 'horizontal') snapGallerySectionIntoPlace();
+          gallerySwipeAxis = Math.abs(swipeDistance) > Math.abs(verticalDistance) * 1.15 ? 'horizontal' : 'vertical';
+          if (gallerySwipeAxis === 'horizontal') {
+            galleryMain.classList.add('is-dragging');
+            galleryMain.setPointerCapture(event.pointerId);
+          }
         }
         if (gallerySwipeAxis !== 'horizontal') return;
         if (event.cancelable) event.preventDefault();
@@ -1159,21 +1149,17 @@
         galleryMain.classList.remove('is-dragging');
         gallerySwipePointerId = null;
         gallerySwipeAxis = '';
-        if (galleryTurnState === 'dragging') cancelGalleryTurn();
-      });
-      let galleryTouchStartX = 0;
-      let galleryTouchStartY = 0;
-      galleryMain.addEventListener('touchstart', (event) => {
-        galleryTouchStartX = event.touches[0].clientX;
-        galleryTouchStartY = event.touches[0].clientY;
-      }, { passive: true });
-      galleryMain.addEventListener('touchmove', (event) => {
-        const horizontalDistance = event.touches[0].clientX - galleryTouchStartX;
-        const verticalDistance = event.touches[0].clientY - galleryTouchStartY;
-        if (Math.abs(horizontalDistance) > 4 && Math.abs(horizontalDistance) > Math.abs(verticalDistance) * 1.05 && event.cancelable) {
-          event.preventDefault();
+        if (galleryTurnState === 'dragging') {
+          galleryMainImage.src = galleryTurnOriginalSrc;
+          galleryMainImage.alt = galleryTurnOriginalAlt;
+          clearGalleryTurnStyles();
         }
-      }, { passive: false });
+      });
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden || galleryTurnState === 'idle') return;
+        if (galleryTurnTargetIndex) syncGallerySelection(galleryTurnTargetIndex);
+        clearGalleryTurnStyles();
+      });
       galleryThumbnails.addEventListener('wheel', (event) => {
         const scrollDistance = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
         if (!scrollDistance) return;
@@ -1300,6 +1286,25 @@
           music.pause();
           musicControl.setAttribute('aria-label', '배경 음악 재생');
           musicControl.setAttribute('aria-pressed', 'false');
+        }
+      });
+
+      // 탭·창을 닫거나 다른 앱으로 전환했을 때 배경 음악이 남지 않도록 즉시 멈춥니다.
+      // 직접 끄지 않은 상태였다면 돌아왔을 때만 다시 재생합니다.
+      let resumeMusicOnReturn = false;
+      function stopMusicWhenLeaving() {
+        resumeMusicOnReturn = !music.paused && !musicUserPaused;
+        music.pause();
+        musicControl.setAttribute('aria-label', '배경 음악 재생');
+        musicControl.setAttribute('aria-pressed', 'false');
+      }
+      window.addEventListener('pagehide', stopMusicWhenLeaving);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          stopMusicWhenLeaving();
+        } else if (resumeMusicOnReturn && !musicUserPaused) {
+          resumeMusicOnReturn = false;
+          void playMusic();
         }
       });
 
