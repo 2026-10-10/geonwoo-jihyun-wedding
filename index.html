@@ -305,7 +305,7 @@
       }
       #location { padding-bottom: 56px; }
       #countdown { min-height: auto; padding: 64px 28px; }
-      #account { min-height: auto; padding: 64px 28px; }
+      #account { min-height: auto; padding: 64px 28px; scroll-snap-align: center; scroll-snap-stop: always; }
       .calendar-date { margin: 0 0 18px; color: var(--ink); font-size: 16px; }
       .week-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; max-width: 340px; margin: 0 auto 40px; font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
       .week-calendar span { display: grid; gap: 7px; place-items: center; color: #8d8580; font-size: 10px; }
@@ -733,7 +733,14 @@
       openContact?.addEventListener('click', () => toggleContact(true));
       closeContact.addEventListener('click', () => toggleContact(false));
       contactModal.addEventListener('click', (event) => { if (event.target === contactModal) toggleContact(false); });
-      document.querySelectorAll('[data-close-contact]').forEach((link) => link.addEventListener('click', () => toggleContact(false)));
+      document.querySelectorAll('[data-close-contact]').forEach((link) => link.addEventListener('click', (event) => {
+        toggleContact(false);
+        if (link.hash !== '#account') return;
+        event.preventDefault();
+        const accountSection = document.querySelector('#account');
+        window.requestAnimationFrame(() => accountSection?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+        window.history.replaceState(null, '', '#account');
+      }));
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') { toggleContact(false); toggleGalleryViewer(false); }
       });
