@@ -739,7 +739,24 @@
         if (link.hash !== '#account') return;
         event.preventDefault();
         const accountSection = document.querySelector('#account');
-        window.requestAnimationFrame(() => accountSection?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+        const scrollRoot = document.documentElement;
+        const previousSnapType = scrollRoot.style.scrollSnapType;
+        const centerAccount = (behavior) => {
+          if (!accountSection) return;
+          const viewport = window.visualViewport;
+          const viewportHeight = viewport?.height || window.innerHeight;
+          const viewportOffsetTop = viewport?.offsetTop || 0;
+          const accountRect = accountSection.getBoundingClientRect();
+          const visibleTop = Math.max(20, viewportOffsetTop + (viewportHeight - accountRect.height) / 2);
+          window.scrollTo({ top: window.scrollY + accountRect.top - visibleTop, behavior });
+        };
+        scrollRoot.style.scrollSnapType = 'none';
+        window.requestAnimationFrame(() => centerAccount('smooth'));
+        window.setTimeout(() => centerAccount('auto'), 520);
+        window.setTimeout(() => {
+          centerAccount('auto');
+          scrollRoot.style.scrollSnapType = previousSnapType;
+        }, 900);
         window.history.replaceState(null, '', '#account');
       }));
       document.addEventListener('keydown', (event) => {
