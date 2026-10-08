@@ -437,6 +437,17 @@
         font-weight: 400;
         line-height: 1.55;
       }
+      @media (max-width: 600px) {
+        html, body {
+          -webkit-text-size-adjust: none;
+          text-size-adjust: none;
+        }
+        h1 { font-size: 40px; }
+        .family-info,
+        .family-info .ceremony-summary { font-size: 18px; }
+        .account-number { font-size: 10px; }
+        .loading-message { font-size: 27px; }
+      }
     </style>
   </head>
   <body>
