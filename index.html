@@ -805,7 +805,7 @@
       }));
 
       const galleryImageCount = 26;
-      const galleryAssetVersion = '20261008-15';
+      const galleryAssetVersion = '20261008-16';
       galleryTotal.textContent = galleryImageCount;
       galleryPreviewMore.textContent = `+${Math.max(0, galleryImageCount - galleryPreviewButtons.length)} 더보기`;
       let selectedGalleryIndex = 1;
@@ -844,9 +844,16 @@
       function preloadGalleryNeighbors(index) {
         const currentPosition = availableGalleryIndexes.indexOf(index);
         if (currentPosition < 0) return;
-        [-1, 1].forEach((direction) => {
+        const neighborIndexes = [-1, 1].map((direction) => {
           const nextPosition = (currentPosition + direction + availableGalleryIndexes.length) % availableGalleryIndexes.length;
-          void preloadGalleryImage(availableGalleryIndexes[nextPosition]);
+          return availableGalleryIndexes[nextPosition];
+        });
+        const retainedIndexes = new Set([index, ...neighborIndexes]);
+        galleryImagePreloads.forEach((_entry, cachedIndex) => {
+          if (!retainedIndexes.has(cachedIndex)) galleryImagePreloads.delete(cachedIndex);
+        });
+        neighborIndexes.forEach((neighborIndex) => {
+          void preloadGalleryImage(neighborIndex).catch(() => galleryImagePreloads.delete(neighborIndex));
         });
       }
 
