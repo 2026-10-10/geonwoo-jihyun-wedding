@@ -357,7 +357,7 @@
       .gallery-thumbnail-arrow[hidden] { display: none; }
       .gallery-thumbnail-prev { left: -4px; background: linear-gradient(270deg, transparent, rgb(252 252 252 / 92%) 38%); }
       .gallery-thumbnail-next { right: -4px; background: linear-gradient(90deg, transparent, rgb(252 252 252 / 92%) 38%); }
-      .gallery-pair { flex: 0 0 23%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; scroll-snap-align: start; }
+      .gallery-pair { flex: 0 0 calc(50% - 4px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; scroll-snap-align: start; }
       .gallery-thumbnail { aspect-ratio: 2 / 3; padding: 0; overflow: hidden; border: 1px solid transparent; background: #e7dfd8; cursor: pointer; }
       .gallery-thumbnail.is-active { border-color: var(--ink); }
       .gallery-thumbnail img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; user-select: none; -webkit-user-drag: none; }
